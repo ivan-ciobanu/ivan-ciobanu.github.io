@@ -1,34 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>hallo</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #1b1b1b;
+      color: #f0f0f0;
+
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2.2rem;
+      color: #ffffff;
+      border-bottom: 2px solid #333;
+      padding-bottom: 12px;
+    }
+
     a {
       display: block;
-      margin-bottom: 12px;
+      text-decoration: none;
+
+      background: #2a2a2a;
+      color: #e8e8e8;
+
+      padding: 16px 18px;
+      margin-bottom: 14px;
+
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
+
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    a:hover {
+      background: #343434;
+      border-color: #5a5a5a;
+      transform: translateY(-2px);
+    }
+
+    a:active {
+      transform: translateY(0);
     }
   </style>
 </head>
+
 <body>
 
-  <h1>dis is mah site</h1>
+  <div class="container">
 
-  <a href="Galactic Staples/index1.html">
-    Galactic staples - a game about automation and industrialism, coded by mr gpt himself.
-  </a>
+    <h1>dis is mah site</h1>
 
-  <a href="stat tracking/sekiro_checklist.html">
-    My Sekiro: Shadows Die Twice boss checklist.
-  </a>
+    <a href="Galactic Staples/index1.html">
+      Galactic staples - a game about automation and industrialism, coded by mr gpt himself.
+    </a>
 
-  <a href="stat tracking/ds3_bosses.html">
-    My Dark Souls III boss checklist.
-  </a>
+    <a href="stat tracking/sekiro_checklist.html">
+      My Sekiro: Shadows Die Twice boss checklist.
+    </a>
 
-  <a href="stat tracking/game-backlog.html">
-    My game backlog.
-  </a>
+    <a href="stat tracking/ds3_bosses.html">
+      My Dark Souls III boss checklist.
+    </a>
+
+    <a href="stat tracking/game-backlog.html">
+      My game backlog.
+    </a>
+
+  </div>
 
 </body>
 </html>
