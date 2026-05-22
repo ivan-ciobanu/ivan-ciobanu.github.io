@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Backlog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --bg2: #eceae4;
+    --bg3: #e2e0d8;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.1);
+    --border2: rgba(0,0,0,0.18);
+    --text: #1a1a18;
+    --text2: #5a5852;
+    --text3: #8a8880;
+    --accent: #2c2c2a;
+    --unplayed-c: #888780;
+    --playing-c: #ba7517;
+    --completed-c: #0f6e56;
+    --dropped-c: #a32d2d;
+    --ne-c: #534ab7;
+    --unplayed-bg: #f1efe8;
+    --playing-bg: #faeeda;
+    --completed-bg: #e1f5ee;
+    --dropped-bg: #fcebeb;
+    --ne-bg: #eeedfe;
+    --shadow: 0 1px 3px rgba(0,0,0,0.07);
+  }
+  [data-theme="dark"] {
+    --bg: #16161400;
+    --bg: #181816;
+    --bg2: #222220;
+    --bg3: #2c2c2a;
+    --surface: #1e1e1c;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #f0ede6;
+    --text2: #a8a59e;
+    --text3: #6a6860;
+    --accent: #f0ede6;
+    --unplayed-c: #b4b2a9;
+    --playing-c: #fac775;
+    --completed-c: #5dcaa5;
+    --dropped-c: #f09595;
+    --ne-c: #afa9ec;
+    --unplayed-bg: #2c2c2a;
+    --playing-bg: #33280a;
+    --completed-bg: #04342c;
+    --dropped-bg: #2e1010;
+    --ne-bg: #26215c;
+    --shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    min-height: 100vh;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .container {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+
+  header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    gap: 1rem;
+  }
+
+  .header-left h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .header-left p {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--text3);
+    letter-spacing: 0.02em;
+  }
+
+  .theme-btn {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--text);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .theme-btn:hover { background: var(--bg3); }
+
+  /* progress */
+  .progress-wrap {
+    margin-bottom: 1.5rem;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text3);
+    margin-bottom: 5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .progress-bar {
+    height: 5px;
+    background: var(--bg3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--completed-c);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  /* stat cards */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    box-shadow: var(--shadow);
+  }
+  .stat-card:hover { background: var(--bg2); }
+  .stat-card.active { border-color: var(--active-color, var(--border2)); }
+  .stat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--active-color, var(--text));
+  }
+  .stat-label {
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 4px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* controls */
+  .controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+    align-items: center;
+  }
+  .search-wrap {
+    flex: 1;
+    position: relative;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    box-shadow: var(--shadow);
+  }
+  .search-wrap input:focus { border-color: var(--border2); }
+  .search-wrap input::placeholder { color: var(--text3); }
+
+  .add-btn {
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .add-btn:hover { opacity: 0.8; }
+
+  .random-btn {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .random-btn:hover { background: var(--bg2); color: var(--text); }
+
+  .random-result {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow);
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .random-result.open { display: flex; }
+  .random-result-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+  .random-result-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .random-reroll {
+    background: none;
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .random-reroll:hover { background: var(--bg2); color: var(--text); }
+
+  /* filters */
+  .filter-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+  .filter-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .filter-pill:hover { border-color: var(--border2); color: var(--text); }
+  .filter-pill.active {
+    border-color: var(--pill-color);
+    color: var(--pill-color);
+    background: transparent;
+  }
+
+  /* add form */
+  .add-form {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    display: none;
+    gap: 8px;
+    align-items: center;
+    box-shadow: var(--shadow);
+  }
+  .add-form.open { display: flex; }
+  .add-form input {
+    flex: 1;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+  }
+  .add-form input:focus { border-color: var(--border2); }
+  .add-form input::placeholder { color: var(--text3); }
+  .add-form button {
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* game list */
+  .game-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .game-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    transition: background 0.1s;
+  }
+  .game-row:last-child { border-bottom: none; }
+  .game-row:hover { background: var(--bg2); }
+  .game-name {
+    font-size: 13px;
+    color: var(--text);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+  .status-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+    cursor: pointer;
+    white-space: nowrap;
+    min-width: 88px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .status-badge:hover { opacity: 0.75; }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text3);
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s;
+  }
+  .game-row:hover .delete-btn { opacity: 1; }
+  .delete-btn:hover { color: #a32d2d; }
+
+  .empty {
+    padding: 2.5rem;
+    text-align: center;
+    color: var(--text3);
+    font-size: 13px;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 480px) {
+    .stat-grid { grid-template-columns: repeat(3, 1fr); }
+    .stat-grid .stat-card:nth-child(4),
+    .stat-grid .stat-card:nth-child(5) { }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="header-left">
+      <h1>Game Backlog</h1>
+      <p id="subtitle">loading...</p>
+    </div>
+    <button class="theme-btn" id="themeBtn" title="Toggle dark mode">☀︎</button>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span>completion</span>
+      <span id="pct-label">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="stat-grid" id="statGrid"></div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Search games...">
+    </div>
+    <button class="add-btn" id="addToggle">+ Add game</button>
+    <button class="random-btn" id="randomBtn">? Random</button>
+  </div>
+
+  <div class="random-result" id="randomResult">
+    <div>
+      <div class="random-result-label">play this next</div>
+      <div class="random-result-name" id="randomName"></div>
+    </div>
+    <button class="random-reroll" id="rerollBtn">reroll</button>
+  </div>
+
+  <div class="filter-row" id="filterRow"></div>
+
+  <div class="add-form" id="addForm">
+    <input type="text" id="newGameInput" placeholder="Game title...">
+    <button id="addConfirm">Add</button>
+  </div>
+
+  <div class="game-list" id="gameList"></div>
+  <p class="footer" id="footer"></p>
+</div>
+
+<script>
+const GAME_NAMES = [
+  "100% Orange Juice","20 Minutes Till Dawn","A Hat in Time","Alien Hominid Invasion",
+  "Amid Evil","Apewar","Balatro","BattleBlock Theater","BattleBit Remastered",
+  "Bejeweled 3","Biped","Biped 2","BioShock","BioShock 2","BioShock 2 Remastered",
+  "BioShock Remastered","Black Desert","Black Mesa","Bloons TD 6","Borderlands 2",
+  "Borderlands 3","Bouncing Duck Simulator","Bridge Constructor Portal","Broforce",
+  "Brotato","Buckshot Roulette","Bug Fables: The Everlasting Sapling","Bugsnax",
+  "Castle Crashers","Celeste","Content Warning","Core Keeper","Counter-Strike 2",
+  "Counter-Strike: Source","Crab Champions","Crawl","Cryptark","Cult of the Lamb",
+  "Dark Souls II: Scholar of the First Sin","Dark Souls: Remastered","Dead Cells",
+  "Deep Rock Galactic","Deltarune","Desktop Dungeons: Enhanced Edition",
+  "Devolver Bootleg","Dishonored","Dominion","Don't Starve","Don't Starve Together",
+  "DOOM + DOOM II","Door Kickers: Action Squad","Downwell","Drawful 2",
+  "Dungeon of the Endless","Dusk","Earth Defense Force 4.1","Elden Ring Nightreign",
+  "Endless Legend","Endoparasitic","Enter the Gungeon","Entropy: Zero","Entropy: Zero 2",
+  "Fallout 4","Fallout 76","Fallout: New Vegas","Fears to Fathom: Home Alone",
+  "Field of Glory II","FTL: Faster Than Light","Getting Over It with Bennett Foddy",
+  "Geometry Dash","Gladius: Relics of War","Grim Dawn","Hacknet","Hades","Half-Life",
+  "Half-Life 2","Half-Life 2: Deathmatch","Half-Life 2: VR Mod - Episode One",
+  "Half-Life 2: VR Mod - Episode Two","Half-Life Deathmatch: Source","Halls of Torment",
+  "Halo Infinite","Halo: Spartan Assault","Halo: Spartan Strike",
+  "Halo: The Master Chief Collection","Helldivers 2","Heroes of Hammerwatch",
+  "House Flipper","Hue","Human: Fall Flat","Hylics","Impaler","Inscryption",
+  "Into the Breach","Islands of Insight","Just Shapes & Beats","Left 4 Dead",
+  "Left 4 Dead 2","Lethal Company","Loop Hero","Machinika Museum","Metal: Hellsinger",
+  "Milo and the Christmas Gift","Milo and the Magpies","Minit Fun Racer",
+  "Monster Hunter Rise","Monster Hunter: World","Muck","No Man's Sky",
+  "Nubby's Number Factory","OFF","Path of Exile","Path of Exile 2","PEAK","Peggle",
+  "Peglin","Pikuniku","Pineapple on Pizza","Pizza Tower","Placid Plastic Duck Simulator",
+  "Plants vs. Zombies","Plants vs. Zombies: Battle for Neighborville",
+  "Plants vs. Zombies: Garden Warfare 2","Portal","Portal 2","Post Void",
+  "PowerWash Simulator","Prey","PropHunter","Quake","Rainbow Six Siege","Remnant II",
+  "Remnant: From the Ashes","Risk of Rain","Risk of Rain 2","Risk of Rain Returns",
+  "Rollerdrome","Sekiro: Shadows Die Twice","Shadows over Loathing","Slay the Spire",
+  "Slime Rancher","Sludge Life","Spelunky","Spelunky 2","Split Fiction","SteamWorld Dig",
+  "Stick Fight: The Game","STRAFTAT","Subnautica","Subnautica: Below Zero",
+  "Super Hexagon","Super Meat Boy","Super Meat Boy Forever","Superhot",
+  "Superhot: Mind Control Delete","Tabletop Simulator","Tell Me Why","Terraria",
+  "The Binding of Isaac","The Binding of Isaac: Rebirth",
+  "The Elder Scrolls II: Daggerfall","The Elder Scrolls V: Skyrim Special Edition",
+  "The Elder Scrolls: Arena","The Finals","The Forest","The Inner World",
+  "The Jackbox Party Pack","The Lab","The Legend of Heroes: Trails from Zero",
+  "The Legend of Heroes: Trails in the Sky","The Legend of Heroes: Trails in the Sky SC",
+  "The Legend of Heroes: Trails in the Sky the 3rd",
+  "The Legend of Heroes: Trails of Cold Steel",
+  "The Legend of Heroes: Trails of Cold Steel II",
+  "The Legend of Heroes: Trails to Azure","The Looker",
+  "There Is No Game: Jam Edition","Titanfall 2","Torchlight II","ULTRAKILL",
+  "Undertale","Vampire Survivors","Vanquish","VVVVVV","Warhammer 40,000: Darktide",
+  "Warhammer: Vermintide","West of Loathing","World of Goo",
+  "World of Goo 2","Worms: Armageddon","Yume Nikki","Your Only Move Is Hustle",
+  "Zuma's Revenge!"
+];
+
+const STATUSES = [
+  { id: "unplayed",  label: "Unplayed",  short: "UNPLAYED",  varLight: "#888780", varDark: "#b4b2a9" },
+  { id: "playing",   label: "Playing",   short: "PLAYING",   varLight: "#ba7517", varDark: "#fac775" },
+  { id: "completed", label: "Completed", short: "COMPLETED", varLight: "#0f6e56", varDark: "#5dcaa5" },
+  { id: "dropped",   label: "Dropped",   short: "DROPPED",   varLight: "#a32d2d", varDark: "#f09595" },
+  { id: "ne",        label: "N/E",       short: "N/E",       varLight: "#534ab7", varDark: "#afa9ec" },
+];
+
+function sortKey(name) {
+  return name.replace(/^(The |A |An )/i, "").toLowerCase();
+}
+
+function isDark() { return document.documentElement.getAttribute("data-theme") === "dark"; }
+
+function statusColor(id) {
+  const s = STATUSES.find(x => x.id === id);
+  return isDark() ? s.varDark : s.varLight;
+}
+
+function statusBg(id) {
+  const map = {
+    unplayed:  isDark() ? "#2c2c2a" : "#f1efe8",
+    playing:   isDark() ? "#33280a" : "#faeeda",
+    completed: isDark() ? "#04342c" : "#e1f5ee",
+    dropped:   isDark() ? "#2e1010" : "#fcebeb",
+    ne:        isDark() ? "#1e1a3a" : "#eeedfe",
+  };
+  return map[id];
+}
+
+// State
+let games = [];
+let filter = "all";
+let searchVal = "";
+let addOpen = false;
+
+function loadGames() {
+  try {
+    const raw = localStorage.getItem("backlog-v3");
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return GAME_NAMES
+    .sort((a, b) => sortKey(a).localeCompare(sortKey(b)))
+    .map((name, i) => ({ id: i + 1, name, status: "unplayed" }));
+}
+
+function saveGames() {
+  try { localStorage.setItem("backlog-v3", JSON.stringify(games)); } catch(e) {}
+}
+
+function getStats() {
+  const s = { total: games.length };
+  STATUSES.forEach(st => s[st.id] = games.filter(g => g.status === st.id).length);
+  return s;
+}
+
+function cycleStatus(id) {
+  const order = STATUSES.map(s => s.id);
+  const g = games.find(x => x.id === id);
+  if (!g) return;
+  g.status = order[(order.indexOf(g.status) + 1) % order.length];
+  saveGames();
+  render();
+}
+
+function deleteGame(id) {
+  if (!confirm("Remove this game from your backlog?")) return;
+  games = games.filter(g => g.id !== id);
+  saveGames();
+  render();
+}
+
+function addGame(name) {
+  name = name.trim();
+  if (!name) return;
+  const game = { id: Date.now(), name, status: "unplayed" };
+  games.push(game);
+  games.sort((a, b) => sortKey(a.name).localeCompare(sortKey(b.name)));
+  saveGames();
+  addOpen = false;
+  render();
+}
+
+function render() {
+  const stats = getStats();
+  const dark = isDark();
+
+  // subtitle
+  document.getElementById("subtitle").textContent =
+    `${stats.total} games · click a badge to cycle status`;
+
+  // progress
+  const pct = Math.round((stats.completed / stats.total) * 100) || 0;
+  document.getElementById("pct-label").textContent =
+    `${pct}% · ${stats.completed} completed`;
+  document.getElementById("progressFill").style.width = pct + "%";
+
+  // stat cards
+  const statGrid = document.getElementById("statGrid");
+  statGrid.innerHTML = "";
+  STATUSES.forEach(st => {
+    const c = dark ? st.varDark : st.varLight;
+    const active = filter === st.id;
+    const card = document.createElement("div");
+    card.className = "stat-card" + (active ? " active" : "");
+    card.style.setProperty("--active-color", c);
+    card.innerHTML = `<div class="stat-num">${stats[st.id]}</div><div class="stat-label">${st.label}</div>`;
+    card.addEventListener("click", () => {
+      filter = filter === st.id ? "all" : st.id;
+      render();
+    });
+    statGrid.appendChild(card);
+  });
+
+  // filter pills
+  const filterRow = document.getElementById("filterRow");
+  filterRow.innerHTML = "";
+  const allPill = pill("All (" + stats.total + ")", filter === "all", "#888", () => { filter = "all"; render(); });
+  filterRow.appendChild(allPill);
+  STATUSES.forEach(st => {
+    const c = dark ? st.varDark : st.varLight;
+    const p = pill(`${st.label} (${stats[st.id]})`, filter === st.id, c, () => {
+      filter = filter === st.id ? "all" : st.id;
+      render();
+    });
+    filterRow.appendChild(p);
+  });
+
+  // add form
+  const addForm = document.getElementById("addForm");
+  addForm.classList.toggle("open", addOpen);
+  document.getElementById("addToggle").textContent = addOpen ? "✕ Cancel" : "+ Add game";
+
+  // filtered list
+  const filtered = games.filter(g =>
+    (filter === "all" || g.status === filter) &&
+    g.name.toLowerCase().includes(searchVal.toLowerCase())
+  );
+
+  const list = document.getElementById("gameList");
+  list.innerHTML = "";
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty">No games match.</div>';
+  } else {
+    filtered.forEach((g, i) => {
+      const c = statusColor(g.status);
+      const bg = statusBg(g.status);
+      const st = STATUSES.find(x => x.id === g.status);
+      const row = document.createElement("div");
+      row.className = "game-row";
+      row.innerHTML = `
+        <span class="game-name">${escHtml(g.name)}</span>
+        <button class="status-badge" style="color:${c};border-color:${c};background:${bg}"
+          data-id="${g.id}">${st.short}</button>
+        <button class="delete-btn" data-del="${g.id}" title="Remove">✕</button>
+      `;
+      list.appendChild(row);
+    });
+    list.querySelectorAll(".status-badge").forEach(btn => {
+      btn.addEventListener("click", () => cycleStatus(Number(btn.dataset.id)));
+    });
+    list.querySelectorAll(".delete-btn").forEach(btn => {
+      btn.addEventListener("click", () => deleteGame(Number(btn.dataset.del)));
+    });
+  }
+
+  document.getElementById("footer").textContent =
+    `Showing ${filtered.length} of ${stats.total} · saved automatically`;
+}
+
+function pill(text, active, color, onClick) {
+  const el = document.createElement("button");
+  el.className = "filter-pill" + (active ? " active" : "");
+  if (active) el.style.setProperty("--pill-color", color);
+  el.textContent = text;
+  el.addEventListener("click", onClick);
+  return el;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+// Theme
+function initTheme() {
+  const saved = localStorage.getItem("backlog-theme");
+  const pref = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  setTheme(pref);
+}
+function setTheme(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  document.getElementById("themeBtn").textContent = t === "dark" ? "☀︎" : "☽";
+  localStorage.setItem("backlog-theme", t);
+  render();
+}
+document.getElementById("themeBtn").addEventListener("click", () => {
+  setTheme(isDark() ? "light" : "dark");
+});
+
+// Search
+document.getElementById("searchInput").addEventListener("input", e => {
+  searchVal = e.target.value;
+  render();
+});
+
+// Add game
+document.getElementById("addToggle").addEventListener("click", () => {
+  addOpen = !addOpen;
+  render();
+  if (addOpen) setTimeout(() => document.getElementById("newGameInput").focus(), 50);
+});
+document.getElementById("addConfirm").addEventListener("click", () => {
+  addGame(document.getElementById("newGameInput").value);
+  document.getElementById("newGameInput").value = "";
+});
+document.getElementById("newGameInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    addGame(e.target.value);
+    e.target.value = "";
+  }
+});
+
+function pickRandom() {
+  const pool = games.filter(g => g.status === "unplayed" || g.status === "dropped");
+  if (pool.length === 0) { alert("No unplayed or dropped games!"); return; }
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  document.getElementById("randomName").textContent = pick.name;
+  document.getElementById("randomResult").classList.add("open");
+}
+
+document.getElementById("randomBtn").addEventListener("click", pickRandom);
+document.getElementById("rerollBtn").addEventListener("click", pickRandom);
+
+// Init
+games = loadGames();
+initTheme();
+</script>
+</body>
+</html>

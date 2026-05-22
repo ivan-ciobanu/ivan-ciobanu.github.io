@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sekiro Boss Checklist</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #111; color: #e5e5e5; min-height: 100vh; padding: 1.5rem; }
+    .app { max-width: 720px; margin: 0 auto; }
+    h1 { font-size: 24px; font-weight: 600; color: #fff; }
+    .subtitle { font-size: 13px; color: #888; margin-top: 4px; }
+    .progress-bar-bg { background: #2a2a2a; border-radius: 99px; height: 6px; margin-top: 12px; }
+    .progress-bar-fill { background: #c0392b; border-radius: 99px; height: 6px; transition: width 0.3s ease; }
+    .stats-row { display: flex; gap: 8px; margin: 1.25rem 0; }
+    .stat-card { flex: 1; background: #1c1c1c; border: 1px solid #2a2a2a; border-radius: 10px; padding: 10px 12px; text-align: center; }
+    .stat-num { font-size: 22px; font-weight: 600; color: #fff; }
+    .stat-label { font-size: 11px; color: #777; margin-top: 2px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; align-items: center; }
+    .filter-btn { padding: 5px 14px; border-radius: 99px; border: 1px solid #333; background: transparent; color: #aaa; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+    .filter-btn.active { background: #c0392b; color: #fff; border-color: #c0392b; }
+    .filter-btn:hover:not(.active) { background: #222; border-color: #444; }
+    select, input[type="text"] { padding: 5px 10px; border-radius: 8px; border: 1px solid #333; background: #1c1c1c; color: #ddd; font-size: 13px; cursor: pointer; outline: none; }
+    select:focus, input[type="text"]:focus { border-color: #555; }
+    input[type="text"] { flex: 1; min-width: 140px; }
+    .phase-label { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; margin: 1.4rem 0 0.5rem; padding: 3px 10px; border-radius: 4px; display: inline-block; }
+    .phase-early    { background: #1a2a1a; color: #6abf6a; }
+    .phase-mid      { background: #1a1a2e; color: #7070d0; }
+    .phase-late     { background: #2e1a00; color: #e08020; }
+    .phase-any      { background: #222;    color: #888; }
+    .section-count  { font-size: 11px; color: #555; margin-left: 8px; }
+    .boss-list { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+    .boss-card { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; border-radius: 8px; border: 1px solid #222; background: #1a1a1a; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .boss-card:hover { border-color: #333; background: #1f1f1f; }
+    .boss-card.defeated { opacity: 0.4; }
+    .boss-card.defeated .boss-name { text-decoration: line-through; }
+    .order-num { font-size: 11px; color: #444; min-width: 20px; margin-top: 3px; flex-shrink: 0; }
+    .checkbox { width: 18px; height: 18px; border-radius: 4px; border: 1.5px solid #444; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; margin-top: 2px; }
+    .checkbox.checked { background: #c0392b; border-color: #c0392b; }
+    .checkmark { width: 10px; height: 7px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg) translate(1px, -1px); }
+    .boss-info { flex: 1; min-width: 0; }
+    .boss-name { font-size: 14px; font-weight: 500; color: #eee; }
+    .boss-meta { display: flex; align-items: center; gap: 6px; margin-top: 3px; flex-wrap: wrap; }
+    .boss-area { font-size: 12px; color: #666; }
+    .boss-where { font-size: 11px; color: #4a4a4a; margin-top: 4px; line-height: 1.5; }
+    .type-pill { font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 99px; }
+    .type-boss { background: #3d0e0e; color: #e87070; }
+    .type-mini { background: #222; color: #777; }
+    .note-pill { font-size: 10px; font-weight: 500; padding: 1px 7px; border-radius: 99px; }
+    .note-optional { background: #2a1a2a; color: #bb77bb; }
+    .note-missable { background: #2e1a00; color: #e08020; }
+    .empty { text-align: center; padding: 2rem; color: #555; font-size: 13px; }
+    .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .reset-btn { font-size: 12px; color: #555; background: none; border: none; cursor: pointer; text-decoration: underline; }
+    .reset-btn:hover { color: #888; }
+    .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; font-size: 11px; color: #555; }
+    .legend-item { display: flex; align-items: center; gap: 5px; }
+    .type-divider { margin-top: 1.5rem; border-top: 1px solid #1e1e1e; padding-top: 1rem; }
+    .type-header { font-size: 13px; font-weight: 600; color: #ccc; margin-bottom: 0.25rem; }
+    @media (max-width: 480px) { body { padding: 1rem; } .stats-row { flex-wrap: wrap; } .stat-card { min-width: calc(50% - 4px); } }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header-row">
+    <div>
+      <h1>Sekiro Boss Checklist</h1>
+      <p class="subtitle" id="progress-text">0 of 0 defeated</p>
+    </div>
+    <button class="reset-btn" onclick="resetAll()">Reset all</button>
+  </div>
+
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num" id="stat-bosses">0/15</div><div class="stat-label">Bosses</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-mini">0/?</div><div class="stat-label">Mini-bosses</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-pct">0%</div><div class="stat-label">Complete</div></div>
+  </div>
+
+  <div class="legend">
+    <span class="legend-item"><span class="note-pill note-missable">Missable</span> gone permanently after a phase</span>
+    <span class="legend-item"><span class="note-pill note-optional">Optional</span> ending or quest locked</span>
+  </div>
+
+  <div class="controls">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('boss', this)">Bosses only</button>
+    <button class="filter-btn" onclick="setFilter('mini', this)">Mini-bosses only</button>
+    <input type="text" placeholder="Search..." oninput="render()" id="search-input">
+  </div>
+
+  <div id="list-container"></div>
+</div>
+
+<script>
+const ALL_BOSSES = [
+  // ── MAIN BOSSES ──────────────────────────────────────────────────────────
+  { id:1,  name:"Gyoubu Masataka Oniwa",              type:"boss", phase:"early", order:1,  area:"Ashina Outskirts",    where:"Outside Ashina Castle Gate — mounted general on horseback" },
+  { id:2,  name:"Lady Butterfly",                      type:"boss", phase:"early", order:2,  area:"Hirata Estate",       where:"Main Hall of Hirata Estate — upper floor dojo", note:"optional" },
+  { id:3,  name:"Genichiro Ashina",                    type:"boss", phase:"early", order:3,  area:"Ashina Castle",       where:"Ashina Castle rooftop — end of early game" },
+  { id:4,  name:"Folding Screen Monkeys",              type:"boss", phase:"mid",   order:1,  area:"Senpou Temple",       where:"Hall of Illusion — secret passage from the Inner Sanctum" },
+  { id:5,  name:"Guardian Ape",                        type:"boss", phase:"mid",   order:2,  area:"Sunken Valley",       where:"Sunken Valley Passage — deep arena inside the cave" },
+  { id:6,  name:"Headless Ape",                        type:"boss", phase:"mid",   order:3,  area:"Ashina Depths",       where:"Ashina Depths — cave before Hidden Forest, after killing Guardian Ape" },
+  { id:7,  name:"Corrupted Monk (Illusion)",           type:"boss", phase:"mid",   order:4,  area:"Mibu Village",        where:"Mibu Village — apparition on the bridge" },
+  { id:8,  name:"Great Shinobi Owl",                   type:"boss", phase:"mid",   order:5,  area:"Ashina Castle",       where:"Ashina Castle rooftop — after Interior Ministry invasion" },
+  { id:9,  name:"Emma, the Gentle Blade",              type:"boss", phase:"mid",   order:6,  area:"Ashina Castle",       where:"Kuro's room — Shura or Purification endings only", note:"optional" },
+  { id:10, name:"Isshin Ashina",                       type:"boss", phase:"mid",   order:7,  area:"Ashina Castle",       where:"Dilapidated Temple — Shura ending only, right after Emma", note:"optional" },
+  { id:11, name:"Owl (Father)",                        type:"boss", phase:"mid",   order:8,  area:"Hirata Estate",       where:"Hirata Estate memory — Purification path only, before final phase", note:"missable" },
+  { id:12, name:"True Corrupted Monk",                 type:"boss", phase:"late",  order:1,  area:"Fountainhead Palace", where:"Fountainhead Palace — large bridge across the palace lake" },
+  { id:13, name:"Divine Dragon",                       type:"boss", phase:"late",  order:2,  area:"Fountainhead Palace", where:"Wedding Cave Door — top of Fountainhead Palace" },
+  { id:14, name:"Demon of Hatred",                     type:"boss", phase:"late",  order:3,  area:"Ashina Outskirts",    where:"Burning Ashina Outskirts — large battlefield, accessible in final phase", note:"optional" },
+  { id:15, name:"Isshin, the Sword Saint",             type:"boss", phase:"late",  order:4,  area:"Ashina Reservoir",    where:"Ashina Reservoir — true final boss (non-Shura endings)" },
+
+  // ── MINI-BOSSES (prayer bead droppers only) ───────────────────────────────
+  // Early
+  { id:16, name:"Leader Shigenori Yamauchi",           type:"mini", phase:"early", order:1,  area:"Ashina Reservoir",    where:"Ashina Reservoir — at the Gate Path idol, very early game" },
+  { id:17, name:"General Naomori Kawarada",            type:"mini", phase:"early", order:2,  area:"Ashina Outskirts",    where:"Ashina Outskirts — camp near Gate Path idol" },
+  { id:18, name:"Chained Ogre",                        type:"mini", phase:"early", order:3,  area:"Ashina Outskirts",    where:"Ashina Outskirts — chained near the watchtower stairway" },
+  { id:19, name:"General Tenzen Yamauchi",             type:"mini", phase:"early", order:4,  area:"Ashina Outskirts",    where:"Ashina Outskirts — courtyard past the Chained Ogre", note:"missable" },
+  { id:20, name:"Shinobi Hunter Enshin of Misen",      type:"mini", phase:"early", order:5,  area:"Hirata Estate",       where:"Hirata Estate — bridge near the first idol, spear-wielding shinobi" },
+  { id:21, name:"Juzou the Drunkard",                  type:"mini", phase:"early", order:6,  area:"Hirata Estate",       where:"Hirata Estate — courtyard pond, guarded by archers and soldiers" },
+  { id:22, name:"Blazing Bull",                        type:"mini", phase:"early", order:7,  area:"Ashina Castle",       where:"Ashina Castle interior — flaming bull in the castle courtyard" },
+  { id:23, name:"General Kuranosuke Matsumoto",        type:"mini", phase:"early", order:8,  area:"Ashina Castle",       where:"Ashina Castle — on the steps leading up to the castle" },
+  { id:24, name:"Seven Ashina Spears – Shikibu Toshikatsu Yamauchi", type:"mini", phase:"early", order:9, area:"Ashina Reservoir", where:"Ashina Reservoir — in front of the building where Kuro was first held" },
+  { id:25, name:"Lone Shadow Longswordsman",           type:"mini", phase:"early", order:10, area:"Ashina Reservoir",    where:"Ashina Reservoir — down the well where Wolf woke up in the prologue" },
+  { id:26, name:"Ashina Elite – Jinsuke Saze",         type:"mini", phase:"early", order:11, area:"Ashina Castle",       where:"Ashina Castle — in the dojo on the way up to the rooftop" },
+  // Mid
+  { id:27, name:"Armored Warrior",                     type:"mini", phase:"mid",   order:1,  area:"Senpou Temple",       where:"Senpou Temple — narrow stone bridge; knock him off the edge to kill" },
+  { id:28, name:"Long-arm Centipede Giraffe",          type:"mini", phase:"mid",   order:2,  area:"Senpou Temple",       where:"Senpou Temple — cave near the Main Hall idol" },
+  { id:29, name:"Long-arm Centipede Sen-Un",           type:"mini", phase:"mid",   order:3,  area:"Sunken Valley",       where:"Sunken Valley — Gun Fort interior cave" },
+  { id:30, name:"Snake Eyes Shirafuji",                type:"mini", phase:"mid",   order:4,  area:"Sunken Valley",       where:"Sunken Valley — Powder Keg area overlooking the Gun Fort" },
+  { id:31, name:"Snake Eyes Shirahagi",                type:"mini", phase:"mid",   order:5,  area:"Ashina Depths",       where:"Ashina Depths — poison swamp near the entrance to Mibu Village" },
+  { id:32, name:"Tokujiro the Glutton",                type:"mini", phase:"mid",   order:6,  area:"Ashina Depths",       where:"Ashina Depths — hidden in the poison swamp, surrounded by monkeys" },
+  { id:33, name:"Mist Noble",                          type:"mini", phase:"mid",   order:7,  area:"Hidden Forest",       where:"Hidden Forest — inside a house at the end of the misty path" },
+  { id:34, name:"O'Rin of the Water",                  type:"mini", phase:"mid",   order:8,  area:"Mibu Village",        where:"Mibu Village — along the river path, ghostly shamisen player" },
+  { id:35, name:"Lone Shadow Vilehand",                type:"mini", phase:"mid",   order:9,  area:"Ashina Castle",       where:"Ashina Castle — antechamber past the dojo, after Ministry invasion" },
+  { id:36, name:"Lone Shadow Masanaga the Spear-Bearer", type:"mini", phase:"mid", order:10, area:"Ashina Castle",       where:"Ashina Castle — dojo room, after Ministry invasion" },
+  { id:37, name:"Juzou the Drunkard (Memory)",         type:"mini", phase:"mid",   order:11, area:"Hirata Estate",       where:"Hirata Estate memory (2nd visit) — same courtyard, harder version", note:"missable" },
+  // Late
+  { id:38, name:"Chained Ogre (Red)",                  type:"mini", phase:"late",  order:1,  area:"Ashina Castle",       where:"Ashina Castle — inside a cage in the antechamber, final phase" },
+  { id:39, name:"Shigekichi of the Red Guard",         type:"mini", phase:"late",  order:2,  area:"Ashina Outskirts",    where:"Burning Ashina Outskirts — near the bridge to the castle" },
+  { id:40, name:"Seven Ashina Spears – Shume Masaji Oniwa", type:"mini", phase:"late", order:3, area:"Ashina Outskirts", where:"Burning Ashina Outskirts — near Ashina Reservoir" },
+  { id:41, name:"Ashina Elite Ujinari Mizuo",          type:"mini", phase:"late",  order:4,  area:"Ashina Castle",       where:"Ashina Castle — small dojo beneath Isshin's old room" },
+  { id:42, name:"Genichiro, Way of Tomoe",             type:"mini", phase:"late",  order:5,  area:"Ashina Castle",       where:"Ashina Castle rooftop — directly before Isshin, the Sword Saint" },
+  // Anytime (prayer bead droppers only — Sakura Bull and Okami Leader Shizu)
+  { id:43, name:"Sakura Bull of the Palace",           type:"mini", phase:"any",   order:1,  area:"Fountainhead Palace", where:"Fountainhead Palace — open grounds near the main gate idol" },
+  { id:44, name:"Okami Leader Shizu",                  type:"mini", phase:"any",   order:2,  area:"Fountainhead Palace", where:"Fountainhead Palace — rooftop of the large palace building" },
+];
+
+const PHASES = [
+  { key:"early", label:"Early Game",               cls:"phase-early" },
+  { key:"mid",   label:"Mid Game",                 cls:"phase-mid"   },
+  { key:"late",  label:"Late Game (Ashina Burns)",  cls:"phase-late"  },
+  { key:"any",   label:"Fountainhead Palace",       cls:"phase-any"   },
+];
+
+const state = {
+  defeated: new Set(JSON.parse(localStorage.getItem('sekiro_defeated_v2') || '[]')),
+  filter: 'all'
+};
+
+function save() { localStorage.setItem('sekiro_defeated_v2', JSON.stringify([...state.defeated])); }
+
+function setFilter(f, btn) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function toggle(id) {
+  if (state.defeated.has(id)) state.defeated.delete(id); else state.defeated.add(id);
+  save(); render();
+}
+
+function resetAll() {
+  if (!confirm('Reset all progress?')) return;
+  state.defeated.clear(); save(); render();
+}
+
+function updateStats() {
+  const total  = ALL_BOSSES.length;
+  const done   = state.defeated.size;
+  const bosses = ALL_BOSSES.filter(b => b.type === 'boss');
+  const minis  = ALL_BOSSES.filter(b => b.type === 'mini');
+  const bossD  = bosses.filter(b => state.defeated.has(b.id)).length;
+  const miniD  = minis.filter(b => state.defeated.has(b.id)).length;
+  const pct    = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('progress-text').textContent = `${done} of ${total} defeated`;
+  document.getElementById('progress-bar').style.width  = pct + '%';
+  document.getElementById('stat-bosses').textContent   = `${bossD}/${bosses.length}`;
+  document.getElementById('stat-mini').textContent     = `${miniD}/${minis.length}`;
+  document.getElementById('stat-pct').textContent      = pct + '%';
+}
+
+function notePill(note) {
+  if (!note) return '';
+  const map = { optional:['note-optional','Optional'], missable:['note-missable','Missable'] };
+  const [cls, label] = map[note] || ['',''];
+  return `<span class="note-pill ${cls}">${label}</span>`;
+}
+
+function render() {
+  const search   = document.getElementById('search-input').value.toLowerCase();
+  const filtered = ALL_BOSSES.filter(b => {
+    if (state.filter === 'boss' && b.type !== 'boss') return false;
+    if (state.filter === 'mini' && b.type !== 'mini') return false;
+    if (search && !b.name.toLowerCase().includes(search) && !b.area.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  updateStats();
+
+  const container = document.getElementById('list-container');
+  if (!filtered.length) { container.innerHTML = '<div class="empty">No results found.</div>'; return; }
+
+  const types = state.filter === 'boss' ? ['boss'] : state.filter === 'mini' ? ['mini'] : ['boss','mini'];
+  const typeLabels = { boss:'Main Bosses', mini:'Mini-Bosses' };
+
+  let html = '';
+  types.forEach(type => {
+    const typeBosses = filtered.filter(b => b.type === type);
+    if (!typeBosses.length) return;
+    const typeDefeated = typeBosses.filter(b => state.defeated.has(b.id)).length;
+    html += `<div class="type-divider"><div class="type-header">${typeLabels[type]} <span style="color:#444;font-weight:400;">${typeDefeated}/${typeBosses.length}</span></div></div>`;
+    PHASES.forEach(phase => {
+      const group = typeBosses.filter(b => b.phase === phase.key).sort((a,b) => a.order - b.order);
+      if (!group.length) return;
+      const groupDefeated = group.filter(b => state.defeated.has(b.id)).length;
+      html += `<div><span class="phase-label ${phase.cls}">${phase.label}</span><span class="section-count">${groupDefeated}/${group.length}</span></div>`;
+      html += `<div class="boss-list">`;
+      group.forEach((b, idx) => {
+        const done = state.defeated.has(b.id);
+        const typePill = b.type === 'boss'
+          ? `<span class="type-pill type-boss">Boss</span>`
+          : `<span class="type-pill type-mini">Mini</span>`;
+        html += `
+          <div class="boss-card ${done ? 'defeated' : ''}" onclick="toggle(${b.id})">
+            <div class="order-num">${idx+1}.</div>
+            <div class="checkbox ${done ? 'checked' : ''}">${done ? '<div class="checkmark"></div>' : ''}</div>
+            <div class="boss-info">
+              <div class="boss-name">${b.name}</div>
+              <div class="boss-meta">${typePill}<span class="boss-area">${b.area}</span>${notePill(b.note)}</div>
+              <div class="boss-where">${b.where}</div>
+            </div>
+          </div>`;
+      });
+      html += `</div>`;
+    });
+  });
+
+  container.innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>

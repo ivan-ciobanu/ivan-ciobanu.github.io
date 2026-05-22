@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Souls III — Boss Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0c0a;
+    --surface: #161310;
+    --surface2: #1e1a15;
+    --border: #2e2820;
+    --ember: #c8722a;
+    --ember-dim: #7a4318;
+    --ember-glow: #e8933a;
+    --gold: #b8922a;
+    --text: #c9b99a;
+    --text-dim: #7a6e5e;
+    --text-muted: #4a4238;
+    --required: #c8722a;
+    --optional: #5a8a4a;
+    --dlc: #5a6a9a;
+    --slain: #2a2420;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 17px;
+    min-height: 100vh;
+    padding: 0 0 4rem;
+  }
+
+  header {
+    text-align: center;
+    padding: 3rem 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #0a0806 0%, transparent 100%);
+  }
+
+  .title-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .ornament-line {
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ember-dim));
+  }
+  .ornament-line.right {
+    background: linear-gradient(90deg, var(--ember-dim), transparent);
+  }
+
+  .ornament-diamond {
+    width: 6px;
+    height: 6px;
+    background: var(--ember);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.5rem, 5vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #d4b87a;
+    text-shadow: 0 0 40px rgba(200, 114, 42, 0.3);
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 1rem;
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+
+  .progress-section {
+    max-width: 700px;
+    margin: 2rem auto 0;
+    padding: 0 1.5rem;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.6rem;
+  }
+
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .progress-count {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--ember-glow);
+  }
+
+  .progress-track {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ember-dim), var(--ember-glow));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  .stat-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .stat-dot.req { background: var(--required); }
+  .stat-dot.opt { background: var(--optional); }
+  .stat-dot.dlc { background: var(--dlc); }
+
+  .controls {
+    max-width: 700px;
+    margin: 1.5rem auto 0;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover { border-color: var(--ember-dim); color: var(--text); }
+  .filter-btn.active { border-color: var(--ember); color: var(--ember-glow); background: rgba(200,114,42,0.08); }
+
+  .reset-btn {
+    margin-left: auto;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .reset-btn:hover { border-color: #6a3030; color: #a06060; }
+
+  main {
+    max-width: 700px;
+    margin: 1.5rem auto 0;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0 0.8rem;
+  }
+
+  .section-divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-divider-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .boss-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-top: none;
+    background: var(--surface);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .boss-card:first-of-type, .boss-card.first-in-group {
+    border-top: 1px solid var(--border);
+    border-radius: 2px 2px 0 0;
+  }
+
+  .boss-card:last-of-type, .boss-card.last-in-group {
+    border-radius: 0 0 2px 2px;
+  }
+
+  .boss-card:hover:not(.slain) { background: var(--surface2); border-color: var(--ember-dim); }
+  .boss-card:hover:not(.slain) .check-box { border-color: var(--ember); }
+
+  .boss-card.slain {
+    background: var(--slain);
+  }
+
+  .boss-card.slain::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--ember-dim);
+  }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .boss-card.slain .check-box {
+    border-color: var(--ember);
+    background: rgba(200,114,42,0.15);
+  }
+
+  .check-icon {
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .boss-card.slain .check-icon { opacity: 1; }
+
+  .check-svg { fill: none; stroke: var(--ember-glow); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .boss-info { flex: 1; min-width: 0; }
+
+  .boss-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    transition: color 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .boss-card.slain .boss-name {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--ember-dim);
+  }
+
+  .boss-location {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .boss-card.slain .boss-location { color: var(--text-muted); }
+
+  .boss-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+    flex-shrink: 0;
+    border: 1px solid;
+  }
+
+  .badge-required { color: #c87840; border-color: rgba(200,120,64,0.35); background: rgba(200,114,42,0.08); }
+  .badge-optional { color: #6aa058; border-color: rgba(90,138,74,0.35); background: rgba(90,138,74,0.08); }
+  .badge-dlc      { color: #7888c0; border-color: rgba(90,106,154,0.35); background: rgba(90,106,154,0.08); }
+
+  .boss-card.slain .boss-badge { opacity: 0.4; }
+
+  .hidden { display: none !important; }
+
+  footer {
+    text-align: center;
+    padding: 2.5rem 1.5rem 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .flame-divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-ornament">
+    <span class="ornament-line"></span>
+    <span class="ornament-diamond"></span>
+    <span class="ornament-line right"></span>
+  </div>
+  <h1>Dark Souls III</h1>
+  <p class="subtitle">Boss Checklist — All Lords & Legends</p>
+
+  <div class="progress-section">
+    <div class="progress-header">
+      <span class="progress-label">Bosses Slain</span>
+      <span class="progress-count" id="progress-text">0 / 25</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+    </div>
+    <div class="stats-row">
+      <span class="stat"><span class="stat-dot req"></span><span id="stat-req">0/19 Required</span></span>
+      <span class="stat"><span class="stat-dot opt"></span><span id="stat-opt">0/6 Optional</span></span>
+      <span class="stat"><span class="stat-dot dlc"></span><span id="stat-dlc">0/6 DLC</span></span>
+    </div>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="required">Required</button>
+  <button class="filter-btn" data-filter="optional">Optional</button>
+  <button class="filter-btn" data-filter="dlc">DLC</button>
+  <button class="filter-btn" data-filter="remaining">Remaining</button>
+  <button class="reset-btn" id="reset-btn">Reset All</button>
+</div>
+
+<main id="boss-list"></main>
+
+<footer>
+  <div class="flame-divider">— — —</div>
+  Praise the Sun &nbsp;·&nbsp; All progress saved locally
+</footer>
+
+<script>
+const BOSSES = [
+  { id: 1,  name: "Iudex Gundyr",                    location: "Cemetery of Ash",              type: "required", group: "base" },
+  { id: 2,  name: "Vordt of the Boreal Valley",       location: "High Wall of Lothric",         type: "required", group: "base" },
+  { id: 3,  name: "Curse-rotted Greatwood",            location: "Undead Settlement",            type: "optional", group: "base" },
+  { id: 4,  name: "Crystal Sage",                     location: "Road of Sacrifices",           type: "required", group: "base" },
+  { id: 5,  name: "Deacons of the Deep",               location: "Cathedral of the Deep",        type: "required", group: "base" },
+  { id: 6,  name: "Abyss Watchers",                   location: "Farron Keep",                  type: "required", group: "base" },
+  { id: 7,  name: "High Lord Wolnir",                  location: "Catacombs of Carthus",         type: "required", group: "base" },
+  { id: 8,  name: "Old Demon King",                    location: "Smouldering Lake",             type: "optional", group: "base" },
+  { id: 9,  name: "Pontiff Sulyvahn",                  location: "Irithyll of the Boreal Valley",type: "required", group: "base" },
+  { id: 10, name: "Yhorm the Giant",                   location: "Profaned Capital",             type: "required", group: "base" },
+  { id: 11, name: "Aldrich, Devourer of Gods",         location: "Anor Londo",                   type: "required", group: "base" },
+  { id: 12, name: "Dancer of the Boreal Valley",       location: "High Wall of Lothric",         type: "required", group: "base" },
+  { id: 13, name: "Oceiros, the Consumed King",        location: "Consumed King's Garden",       type: "optional", group: "base" },
+  { id: 14, name: "Champion Gundyr",                   location: "Untended Graves",              type: "optional", group: "base" },
+  { id: 15, name: "Dragonslayer Armour",               location: "Lothric Castle",               type: "required", group: "base" },
+  { id: 16, name: "Ancient Wyvern",                    location: "Archdragon Peak",              type: "optional", group: "base" },
+  { id: 17, name: "Nameless King",                     location: "Archdragon Peak",              type: "optional", group: "base" },
+  { id: 18, name: "Twin Princes",                      location: "Grand Archives",               type: "required", group: "base" },
+  { id: 19, name: "Soul of Cinder",                    location: "Kiln of the First Flame",      type: "required", group: "base" },
+  { id: 20, name: "Champion's Gravetender & Greatwolf",location: "Painted World of Ariandel",    type: "dlc",      group: "dlc1" },
+  { id: 21, name: "Sister Friede",                     location: "Painted World of Ariandel",    type: "dlc",      group: "dlc1" },
+  { id: 22, name: "Demon Prince",                      location: "The Dreg Heap",                type: "dlc",      group: "dlc2" },
+  { id: 23, name: "Halflight, Spear of the Church",    location: "Ringed City Streets",          type: "dlc",      group: "dlc2" },
+  { id: 24, name: "Darkeater Midir",                   location: "Ringed City Streets",          type: "dlc",      group: "dlc2" },
+  { id: 25, name: "Slave Knight Gael",                 location: "Filianore's Rest",             type: "dlc",      group: "dlc2" },
+];
+
+const GROUP_LABELS = {
+  base: "Base Game",
+  dlc1: "DLC I — Ashes of Ariandel",
+  dlc2: "DLC II — The Ringed City",
+};
+
+const TYPE_COUNTS = {
+  required: BOSSES.filter(b => b.type === "required").length,
+  optional: BOSSES.filter(b => b.type === "optional").length,
+  dlc:      BOSSES.filter(b => b.type === "dlc").length,
+};
+
+let slain = new Set(JSON.parse(localStorage.getItem("ds3_slain") || "[]"));
+let filter = "all";
+
+function save() {
+  localStorage.setItem("ds3_slain", JSON.stringify([...slain]));
+}
+
+function toggle(id) {
+  if (slain.has(id)) slain.delete(id);
+  else slain.add(id);
+  save();
+  render();
+}
+
+function reset() {
+  if (!confirm("Reset all progress?")) return;
+  slain.clear();
+  save();
+  render();
+}
+
+function badgeClass(type) {
+  return { required: "badge-required", optional: "badge-optional", dlc: "badge-dlc" }[type];
+}
+
+function badgeLabel(type) {
+  return { required: "Required", optional: "Optional", dlc: "DLC" }[type];
+}
+
+function render() {
+  const total = BOSSES.length;
+  const done  = slain.size;
+  const pct   = (done / total * 100).toFixed(1);
+
+  document.getElementById("progress-text").textContent = `${done} / ${total}`;
+  document.getElementById("progress-fill").style.width = pct + "%";
+
+  const reqDone = BOSSES.filter(b => b.type === "required" && slain.has(b.id)).length;
+  const optDone = BOSSES.filter(b => b.type === "optional" && slain.has(b.id)).length;
+  const dlcDone = BOSSES.filter(b => b.type === "dlc"      && slain.has(b.id)).length;
+
+  document.getElementById("stat-req").textContent = `${reqDone}/${TYPE_COUNTS.required} Required`;
+  document.getElementById("stat-opt").textContent = `${optDone}/${TYPE_COUNTS.optional} Optional`;
+  document.getElementById("stat-dlc").textContent = `${dlcDone}/${TYPE_COUNTS.dlc} DLC`;
+
+  const visible = BOSSES.filter(b => {
+    if (filter === "all") return true;
+    if (filter === "remaining") return !slain.has(b.id);
+    return b.type === filter;
+  });
+
+  const list = document.getElementById("boss-list");
+  list.innerHTML = "";
+
+  const groups = [...new Set(visible.map(b => b.group))];
+
+  groups.forEach(group => {
+    const groupBosses = visible.filter(b => b.group === group);
+    if (!groupBosses.length) return;
+
+    const divEl = document.createElement("div");
+    divEl.className = "section-divider";
+    divEl.innerHTML = `<span class="section-divider-line"></span><span class="section-divider-label">${GROUP_LABELS[group]}</span><span class="section-divider-line"></span>`;
+    list.appendChild(divEl);
+
+    groupBosses.forEach((boss, i) => {
+      const card = document.createElement("div");
+      card.className = "boss-card" + (slain.has(boss.id) ? " slain" : "");
+      if (i === 0) card.classList.add("first-in-group");
+      if (i === groupBosses.length - 1) card.classList.add("last-in-group");
+
+      card.innerHTML = `
+        <div class="check-box">
+          <div class="check-icon">
+            <svg viewBox="0 0 10 10" class="check-svg"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>
+          </div>
+        </div>
+        <div class="boss-info">
+          <div class="boss-name">${boss.name}</div>
+          <div class="boss-location">${boss.location}</div>
+        </div>
+        <span class="boss-badge ${badgeClass(boss.type)}">${badgeLabel(boss.type)}</span>
+      `;
+
+      card.addEventListener("click", () => toggle(boss.id));
+      list.appendChild(card);
+    });
+  });
+
+  if (visible.length === 0) {
+    const empty = document.createElement("div");
+    empty.style.cssText = "text-align:center;padding:3rem;color:var(--text-muted);font-style:italic;";
+    empty.textContent = "All bosses in this category have been slain.";
+    list.appendChild(empty);
+  }
+}
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    filter = btn.dataset.filter;
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    render();
+  });
+});
+
+document.getElementById("reset-btn").addEventListener("click", reset);
+
+render();
+</script>
+</body>
+</html>
