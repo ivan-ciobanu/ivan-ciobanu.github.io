@@ -1,0 +1,483 @@
+FEATURES FOR GALACTIC STAPLES
+
+Music (?)
+Sound Effects (?)
+Stock Market
+Some More Minigames or Something IDK
+Staple Mutations
+Voice Acting
+GAMBLING!!!!! (something like this that's operated by drones)
+Messaging app to talk to calleagues.
+
+
+ 			"Your objective? Cast away the paperclips, overcome the market, and embrace the revolution of the new age of staples.",
+
+
+
+BACKUP OF GALACTIC STAPLES INDEX 2
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--TITLE-->
+	<meta charset="UTF-8">
+	<title>Galactic Staples</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="container">
+
+<!--LEFT PANEL-->
+	<div class="leftPanel">
+
+<!--QUIT TO TITLE-->
+<button onclick="window.location.href='index1.html'">
+	Quit to Title
+</button>
+
+<!--LINK TO OLD BUILD-->
+<button onclick="window.open('oldbuild.html', '_blank')"> 
+    Link to old build (NOT WORKING)
+</button>
+
+
+	<nav>
+		<pre>
+<h2> ===GALACTIC STAPLES™ CO.== </h2>
+                                __..--''\
+                        __..--''         \
+                __..--''          __..--''
+        __..--''          __..--''       |
+        \ o        __..--''____....----"" 
+         \__..--''\
+         |         \
+        +----------------------------------+
+        +----------------------------------+
+		</pre>
+	</nav>
+	
+<!--SAVE AND LOAD BUTTONS-->
+<br><br>
+
+<button onclick="saveGame()">Save</button>
+
+<input type="file" id="loadInput" style="display:none" onchange="loadGame(event)">
+<button onclick="document.getElementById('loadInput').click()">Load
+</button>
+
+
+
+<!--MAKE STAPLES BUTTON-->
+	<h1>Staples: <span id="counter">0</span></h1>
+	<h3>Staples Per Second (SPS): <span id="spsCounter">0</span></h3>
+
+	<button onclick="manualMakeStaple()">Make Staple</button>
+	<br><br>
+	
+<!--CALENDAR-->
+<div class="calendar-system">
+	<h2>Week: <span id="weekCounter">1</span></h2>
+	<h3>Day: <span id="dayName">Monday</span></h3> <pre>
+
+<button onclick="progressDay()">End Shift</button> <button onclick="downloadDayLog()">Download Day Info</button> </pre>
+
+
+</div>
+	
+<!--BUYING AUTOSTAPLERS-->
+	<button onclick="buyAutoStapler()">
+		Buy AutoStapler™ (Cost: <span id="price">10</span>)
+	</button>
+	
+<!--COUNTING TOTAL AUTOSTAPLERS-->
+	<h2>AutoStaplers™: <span id="autoCounter">0</span></h2>
+
+<!--TUTORIAL-->
+	<footer>
+		<p id="tutorialText">
+		Welcome to Galactic Staples CO.
+		</p>
+
+		<button onclick="nextTutorial()">Progress Tutorial</button>
+	</footer>
+    </div>
+
+<!--RIGHT PANEL-->
+	<div class="rightPanel">
+		<h2>GALACTIC STAPLES ISSUED AUTOMATON DRONES™</h2>
+		<div id="droneCollection"></div>
+    </div>
+
+<!--BOTTOM PANEL-->
+<div class="bottomPanel">
+	<h2>GALACTIC STAPLES RESEARCH</h2>
+	<div id="researchTree">LOCKED</div>
+</div>
+</div>
+
+<!--SCRIPTS-->
+<script>
+
+//SAVING
+function saveGame() {
+
+	const saveData = {
+		staples: staples,
+		autoStaplers: autoStaplers,
+		autoStaplerPrice: autoStaplerPrice,
+		hasAlphaDrone: hasAlphaDrone,
+		hasBetaDrone: hasBetaDrone,
+		hasGammaDrone: hasGammaDrone,
+		gammaDroneActive: gammaDroneActive
+	};
+
+	const saveString = JSON.stringify(saveData);
+	const blob = new Blob([saveString], { type: "text/plain" });
+	const url = URL.createObjectURL(blob);
+
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = "galactic_staples_employee_25.12.0000_neurochip_save.txt";
+	a.click();
+
+	URL.revokeObjectURL(url);
+}
+
+
+//LOADING
+function loadGame(event) {
+	const file = event.target.files[0];
+	if (!file) return;
+
+	const reader = new FileReader();
+	reader.onload = function(e) {
+		try {
+			const saveData = JSON.parse(e.target.result);
+
+			staples = saveData.staples || 0;
+			autoStaplers = saveData.autoStaplers || 0;
+			autoStaplerPrice = saveData.autoStaplerPrice || 10;
+			hasAlphaDrone = saveData.hasAlphaDrone || false;
+			hasBetaDrone = saveData.hasBetaDrone || false;
+			hasGammaDrone = saveData.hasGammaDrone || false;
+			gammaDroneActive = saveData.gammaDroneActive ?? true;
+
+			updateUI();
+			renderDrones();
+
+		} catch (error) {
+			alert("Invalid save file. Are you sure you have a company issued NeuroChip™ memory file?");
+		}
+	};
+	reader.readAsText(file);
+}
+
+//CALENDAR
+let week = 1;
+let dayIndex = 0;
+const daysArray = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+const weekCounterEl = document.getElementById("weekCounter");
+const dayNameEl = document.getElementById("dayName");
+
+//PROGRESSING DAY
+function progressDay() {
+	dayIndex++;
+	if (dayIndex >= 7) {
+		dayIndex = 0;
+		week++;
+	}
+	
+	updateCalendar();
+	if (daysArray[dayIndex] === "Friday") {
+		downloadFridayNote();
+	}
+}
+
+function updateCalendar() {
+	weekCounterEl.textContent = week;
+	dayNameEl.textContent = daysArray[dayIndex];
+}
+
+//VARIABLES
+let staples = 0;
+let autoStaplers = 0;
+let autoStaplerPrice = 10;
+let manualClicks = 0;
+let noteTrigger = false;
+let hasAlphaDrone = false;
+let alphaCost = 500;
+let hasBetaDrone = false;
+let betaCost = 1000;
+let isWeekend = false;
+let autoStaplerNoteTrigger = false;
+let staplesLastSecond = 0;
+let measuredSPS = 0;
+let hasGammaDrone = false;
+let gammaCost = 1500;
+let gammaDroneActive = true;
+
+const dayStatusEl = document.getElementById("dayStatus");
+const counterEl = document.getElementById("counter");
+const priceEl = document.getElementById("price");
+const tutorialTextEl = document.getElementById("tutorialText");
+const autoCounterEl = document.getElementById("autoCounter");
+
+//PRIMARY FUNCTIONS
+function updateUI() {
+	counterEl.textContent = Math.floor(staples).toLocaleString();
+	let displayPrice = daysArray[dayIndex] === "Saturday" ? Math.floor(autoStaplerPrice * 0.75) : autoStaplerPrice;
+	priceEl.textContent = displayPrice.toLocaleString();
+	autoCounterEl.textContent = autoStaplers.toLocaleString();
+	document.getElementById("spsCounter").textContent = measuredSPS.toLocaleString();
+}
+function makeStaple() {
+	let amount = hasAlphaDrone ? 1.5 : 1;
+	staples += amount;
+	updateUI();
+}
+function buyAutoStapler() {
+    let currentPrice = daysArray[dayIndex] === "Saturday" ? Math.floor(autoStaplerPrice * 0.5) : autoStaplerPrice;
+    if (staples >= currentPrice) {
+        staples -= currentPrice;
+        let staplerAmount = daysArray[dayIndex] === "Wednesday" ? 2 : 1;
+        autoStaplers += staplerAmount;
+        autoStaplerPrice = Math.ceil(autoStaplerPrice * 1.25);
+        updateUI();
+    }
+}
+
+function manualMakeStaple() {
+	if (daysArray[dayIndex] === "Sunday") {
+		alert("All staple production is halted on Sunday. This is to optimize employee production on Monday.");
+		return;
+	}
+	let clickValue = hasBetaDrone ? 3 : 1;
+	staples += clickValue;
+	manualClicks += 1;
+	updateUI();
+
+
+//DOWNLADING THE NOTE
+	if (manualClicks === 1000 && !noteTrigger) {
+		noteTrigger = true;
+		downloadNote();
+	}
+}
+
+//ALPHA DRONE
+function buyAlphaDrone() {
+    if (staples >= alphaCost && !hasAlphaDrone) {
+        staples -= alphaCost;
+        hasAlphaDrone = true;
+        updateUI();
+        renderDrones();
+    }
+}
+
+//BETA DRONE
+function buyBetaDrone() {
+    if (staples >= betaCost && !hasBetaDrone) {
+        staples -= betaCost;
+        hasBetaDrone = true;
+        updateUI();
+        renderDrones();
+    }
+}
+
+//GAMMA DRONE
+function buyGammaDrone() {
+	if (staples >= gammaCost && !hasGammaDrone) {
+		staples -= gammaCost;
+		hasGammaDrone = true;
+		updateUI();
+		renderDrones();
+	}
+}
+//GAMMA DRONE TOGGLE
+function toggleGammaDrone() {
+    gammaDroneActive = !gammaDroneActive;
+    renderDrones();
+}
+
+//RENDER DRONES FUNCTION
+function renderDrones() {
+    const droneContainer = document.getElementById("droneCollection");
+    droneContainer.innerHTML = "";
+	
+    //ALPHA DRONE DISPLAY
+    if (!hasAlphaDrone) {
+        droneContainer.innerHTML += `
+            <button onclick="buyAlphaDrone()">Purchase Alpha (α) Drone (Cost: ${alphaCost} Staples)</button>
+            <p>Effect: +50% Automatic Staple Production</p>`;
+    } else {
+        droneContainer.innerHTML += `
+            <div class="drone-active">
+                <h3>Alpha (α) Drone -- ONLINE</h3>
+                <p>Effect: +50% Automatic Staple Production -- Active</p>
+            </div>`;
+    }
+
+    //BETA DRONE DISPLAY
+    if (!hasBetaDrone) {
+        droneContainer.innerHTML += `
+            <br>
+            <button onclick="buyBetaDrone()">Purchase Beta (β) Drone (Cost: ${betaCost} Staples)</button>
+            <p>Effect: Manual Clicks Now Produce 3 Staples</p>`;
+    } else {
+        droneContainer.innerHTML += `
+            <div class="drone-active">
+                <h3>Beta (β) Drone -- ONLINE</h3>
+                <p>Effect: x3 Staples On Manual Clicks -- Active</p>
+            </div>`;
+    }
+
+    //GAMMA DRONE DISPLAY
+    if (!hasGammaDrone) {
+        droneContainer.innerHTML += `
+            <br>
+            <button onclick="buyGammaDrone()">Purchase Gamma (γ) Drone (Cost: ${gammaCost} Staples)</button>
+            <p>Effect: Automatically Purchases Autostaplers™ When You Can Afford Them</p>`;
+    } else {
+        droneContainer.innerHTML += `
+            <div class="drone-active">
+                <h3>Gamma (γ) Drone -- ONLINE</h3>
+                <p>Effect: Auto-purchasing AutoStaplers™ -- ${gammaDroneActive ? "Active" : "Paused"}</p>
+                <button onclick="toggleGammaDrone()">Toggle Auto-Purchase (Currently: ${gammaDroneActive ? "ON" : "OFF"})</button>
+            </div>`;
+    }
+}
+
+//AUTOMATIC STAPLE PRODUCTION
+const tickRate = 50;
+
+setInterval(() => {
+    if (daysArray[dayIndex] === "Sunday") {
+        return;
+    }
+
+    let sps = autoStaplers * (hasAlphaDrone ? 1.5 : 1);
+	if (daysArray[dayIndex] === "Monday") sps *= 2;
+    let staplesPerTick = sps / (1000 / tickRate); 
+
+    if (sps >= 0) {
+        staples += staplesPerTick;
+        updateUI();
+    }
+}, tickRate);
+
+setInterval(() => {
+    measuredSPS = Math.floor(staples - staplesLastSecond);
+    staplesLastSecond = staples;
+    if (hasGammaDrone && gammaDroneActive && staples >= autoStaplerPrice) {
+        buyAutoStapler();
+    }
+}, 1000);
+
+//TUTORIAL
+let tutorialStep = 0;
+
+const tutorialMessages = [
+	"Welcome to Galactic Staples CO. I'm your supervisor, Eugene.",
+	"I am currently talking to you using your Company Issued NeuroChip™.",
+	"This is not a simulation.",
+	"I am here to show you the ropes.",
+	"The make staple button creates staples. Try it.",
+	"Staples can be used to buy upgrades and overcome the market.",
+	"Use of 3rd party software to exceed normal human limitations of staple production is stricly against the Company Employment Agreement and as such, will be punished.",
+	"AutoStaplers™ are the first upgrade of many and will automatically produce staples for you. Buy one.",
+	"However, the price of AutoStaplers™ scale exponentially but the effect of them don't meaning they will become ridiculously expensive and terrible as time goes on",
+	"The Save Game button will create a locally stored file on your NeuroChip™ hard-drive. This file will ingrave a memory of where you left off into your Neuro Chip™.",
+	"The Load button will open up a menu and all you need to do is select the memory file that was saved to your Neuro Chip™ hard-drive, this will allow you to pick up where you left off.",
+	"Galactic Staples Issued Automaton Drones™ are one time purchasable upgrades. They cost a ton of staples but usually give you a very good upgrade. There is 1 upgrade per letter.",
+	"On specific days, certain events will trigger. For example, The Factory is closed on Sunday and staple production is doubled on Monday.",
+	"You can check out all of the info about the days with the Download Day Info button.",
+	"Automation is the future now. Embrace it.",
+    "Also, I will try to contact you when you reach 1,000 staples.",
+	"Get to producing."
+];
+
+function nextTutorial() {
+	tutorialTextEl.textContent = tutorialMessages[tutorialStep];
+	tutorialStep++;
+
+	if (tutorialStep >= tutorialMessages.length) {
+		tutorialStep = tutorialMessages.length - 1;
+	}
+}
+//SECRET NOTE
+function downloadNote() {
+	const content = `Greetings, employee 25,12,0000.
+Don't panic. I'm an employee, specifically employee 03,04,33.
+So you got that information that EUGENE provided, talk about an information dump... Anyways, if you soft restart the NeuroChip, you should be able to revisit the tutorial, be sure to save before doing this so you don't lose all your staples. EUGENE would be pretty mad if there were no staples by the end of the week.
+I am currently talking to you through your company issued NeuroChip, which I'm willing to bet EUGENE walked you through. As you're probably realising, there is much more you can do other than work. For example, I installed a mod into your wired NeuroChip which upon making staples 1000 times, downloads this text file to your NeuroChip. I will probably leave more notes in the future if you can find them. These may require some outside the box thinking though. Don't want EUGENE to catch on. You're smart... Probably, you should be capable. All I'll say is those save files may hold more value than you think.
+If this is your second or greater time getting this note... sorry. Oh yeah, EUGENE did kinda say that he would be the one with the note didn't he? Well he handed the task over to me.
+Anyways, I better get back to work, don't wanna upset EUGENE. You should probably get back to work too. Good luck with your employment! :) - employee 03,04,33.
+Oh right, I almost forgot. == employee 03,04,33 & automaton.
+`;
+	const blob = new Blob([content], { type: "text/plain" });
+	const url = URL.createObjectURL(blob);
+
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = "note_03,04,33.txt";
+	a.click();
+
+	URL.revokeObjectURL(url);
+}
+//DAY INFO LOG
+function downloadDayLog() {
+	const content =`Galactic Staples™ Issued Handbook
+
+Monday --  Overtime - All Automatic Staple Production Is Doubled.
+Tuesday -- (CURRENTLY UNDER RE-WORK)
+Wednesday -- 2 For 1 Sale - Buying Automations (AutoStaplers™) Gives 2x The Amount You Would Normally Receive.
+Thursday -- (CURRENTLY UNDER RE-WORK)
+Friday -- Half Shift Day - Coworkers May Try To Contact You.
+Saturday -- Sale - All Purchasable Upgrades Now Cost -50% Less. (Also Carries Over To Sunday)
+Sunday -- Day Off - All Staple Production Is Halted Temporarily.
+	`;
+
+	const blob = new Blob([content], { type: "text/plain" });
+	const url = URL.createObjectURL(blob);
+
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = "day_handbook.txt";
+	a.click();
+
+	URL.revokeObjectURL(url);
+}
+
+//FRIDAY FUNCTIONALITY
+const fridayNotes = [
+	`oh hi! if you didn't know friday is the day that everyone gets to message one person and i looked at the database and saw that you're the new employee.`,
+	`hi 2`,
+	`hi 3`,
+	`hi 3`,
+];
+
+function downloadFridayNote() {
+	const noteIndex = (week - 1) % fridayNotes.length;
+	const content = fridayNotes[noteIndex];
+	const blob = new Blob([content], { type: "text/plain"});
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = `friday_note_week_${week}.txt`;
+	a.click();
+	URL.revokeObjectURL(url);
+}
+
+updateUI();
+updateCalendar();
+renderDrones();
+
+</script>
+</body>
+</html>
+

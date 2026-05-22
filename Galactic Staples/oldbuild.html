@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--TITLE-->
+    <meta charset="UTF-8">
+    <title>Galactic Staples (OLD BUILD)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>GALACTIC STAPLES OLD BUILD.</h1>
+<h2>PLEASE ENTER COMPANY PROVIDED USERNAME AND PASSWORD</h2>
+
+<!--USERNAME & PASSWORD LOGIC-->
+<input type="text" id="usernameBox" placeholder="Username">
+<br>
+<input type="password" id="passwordBox" placeholder="Password" onkeydown="checkEnter(event)"> <button onclick="getText()">Enter</button>
+<br>
+
+<!--SCRIPT-->
+<script>
+
+//UPON ENTER, SUBMIT USERNAME AND PASSWORD
+function checkEnter(event) {
+    if (event.key === "Enter") {
+        getText();
+    }
+}
+
+//USERNAME & PASSWORD FUNCTIONALITY
+function getText() {
+    let username = document.getElementById("usernameBox").value.trim();
+    let password = document.getElementById("passwordBox").value.trim();
+    if (username === "employee 03,04,33" && password === "automaton") {
+        window.location.href = "oldestbuild.html";
+    } else {
+        alert("Incorrect Username or Password");
+    }
+}
+
+</script>
+
+</body>
+</html>

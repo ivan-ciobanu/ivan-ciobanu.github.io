@@ -1,0 +1,96 @@
+<html>
+<title> Information </title>
+<body>
+<link rel="stylesheet" href="style.css">
+<button onclick="window.location.href='index1.html'">
+Quit to Title
+</button>
+<h1>
+This is the information page (just a giant wall of text full of yapping)
+</h1>
+
+<h2>
+THE MAKING OF GALACTIC STAPLES
+</h2>
+As I previously mentioned, this game/website was inspired by 2 other browser games, Candy Box 2, and Universal Paperclips. Both of which and really enjoy. I originally started this project as nothing
+more than a little school project I would quickly pump out and release, but the more I worked on it. The more I enjoyed working on it. Thinking of new things to add and going on an adventure to try
+and code/steal it in was really cool and I will probably continue to make things like this.
+
+<h2>
+DESIGN
+</h2>
+As for the design, the games setting is very industrial and unwelcoming. I tried to encapsulate this in the websites design with it being a monospace font (also my favourite font) and a pure black,
+hex code: #000000 type of thing. I won't spoil anything else but yeah, if the story doesn't make sense yet, there will be updates coming.
+
+<h2>
+FEATURES
+</h2>
+This project was kind of just an amalgamation of different features from Candy Box 2 and Universal Paperclips but I had a lot of fun with it. Some of my code (primarily the code from index1.html, style.css, and readme.html) was basically all done by me, but roughly 50% of the code from index2.html was either stolen from Candy Box 2 / Universal Paperclips or Claude, when stealing 
+or asking Claude to create me code, I would always try to understand what it meant and if I didn't, I would ask Claude to explain it to me. If I didn't understand how it worked. I didn't add it
+Anyway, here's all the features: a clickable button that increases a counter, a button that automatically increases the main counter, a functioning tutorial, and saving a .txt file to your computer
+ with information about your save and a load feature which allows you to upload that .txt file to resume your progress. Those are the features so far (excluding the obvious things like links). Also if you're wondering why the
+ Javascript is so over the top and advanced, I have a lot of experience with scripting languages, specifically GDscript and GML as I've had an interest in game development since like year 7-ish and have
+ been making games on and off during my free time. The code isn't perfect though, it's very fragile and if you mess up one little thing it could delete all of the code so I frequently backed everything up.
+
+<h2>
+HOW THIS WORKS
+</h2>
+I am now going to state how everything works in this game/website. 
+<h2>
+STAPLES
+</h2>
+
+The staple counter starts at 0 and clicking the button called "make staple" will add +1 staple. updateUI() refreshes the screen and
+using toLocaleString() along with some formatting so when a number reaches a number with three "0s", it will add a comma (,) for readability (eg: 1000 > 1,000).
+
+<h2>
+AUTOSTAPLERS
+</h2>
+Autostaplers work by subtracting a number of staples (starts at 10 staples, price increases by 1.25x each time an autostapler is bought.) and periodically adds 1 staple per second, increasing the
+staples per second depending on how many autostaplers you have (eg 0 autostaplers = 0 staples per second and 10 autostaplers = 10 staples per second).
+
+<h2>
+SAVING + LOADING
+</h2>
+Saving + loading I mentioned briefly earlier but I will go in a bit more depth here.
+When you press the "save" button it will download a .txt file. In this file is some data, this data shows how many staples, autostaplers, autostapler price, etc is shown. Yes this means you can
+manually edit the save and give yourself 999,999,999,999,999 staples and autostaplers. I kept this as a psuedo accessebility feature for people who don't like to grind. However, trying to mess around
+too much and trying to load it can crash the website. You reap what you sow, I guess. Oh yeah, also there are notes that will download upon reaching a certain threshold of staples. Some of these requirements are ridiculously large and so you HAVE to edit your save file to get the manual clicks required.
+Loading will bring up a file explorer menu which from there you can upload your .txt save which will resume the game with the present stats. The way it actually works is you save the game state and
+stats with JSON.stringify and create a blob (binary large object) which allows you to store binary data, a .txt file is downloaded to your computer, FileReader is used to read the file that is
+selected in the load menu, it will then restore the values and updateUI().
+
+<h2>
+DRONES
+</h2>
+The Alpha Drone is an upgrade which increases all total staple production by +50%. This is a really useful upgrade, as all multiplication is in clicker games. I'm gonna be honest, this was really
+complex for me to wrap my head around so I did actually steal/generate a lot of this code. Just treat all the drones as bonus content. The Beta Drone is actually pretty bad ngl so far and I'm probably
+going to buff it in a later update. At the time of writing it gives your manual staple clicks a 3x multiplier. This is... pretty bad, as it falls off HARD late game as it's just a flat number. The
+Gamma Drone is pretty useful, but doesn't really supply a buff as much as it does just give you a little quality of life feature that speeds up automation. I like it though.
+
+<h2>
+CALENDAR
+</h2>
+The calendar is not fully operational at the time of writing this and if you are seeing this, the current game build too. Currently the only days that do anything are Monday and Sunday. Monday will
+times your staple production by 2. And Sunday will stop all staple production (manual or automatic).
+
+<h2>
+    OLD BUILD
+</h2>
+The old build is just a simple textbox with a username and password feature. You can find the username and password by looking at some of the notes (or by looking at the code like a little cheater.)
+
+<h2>
+    OLDEST BUILD
+</h2>
+This is also a very lazy addition with it just being some text and a button that updates and removes text. It works identically to the tutorial.
+<h1>
+THINGS TO ADD
+</h1> </pre>
+You can treat this as a roadmap of sorts. Basically just things I plan to add in the future. These are in no particular order. <pre>
+- Sound effects. (Maybe, I dunno yet.)
+- The rest of the drones. (the rest of the greek alphabet)
+- 6 Special "Archaic" drones.
+- New mechanics like a gambling system (buying drones gets really stale).
+- More notes (for lore) (yes that also means more puzzles. I don't care, puzzles are fun.)
+- Quota you need to fufil by the end of the day and specific events will happen on days. (kinda already have working a little bit)
+- 1 new webpage with some cool gimmick.

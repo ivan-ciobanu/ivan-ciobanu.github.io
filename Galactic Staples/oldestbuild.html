@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>greetings employee 25.12.0000</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+<h1>hi</h1>
+    I've managed to edit some minor things of the galactic staples interface and repurposed this old version of galactic staples into my own site where I am able to one way communicate with you. I have 
+    no idea if this will actually work but lets see. I will let you talk to me about what is happening and who anyone is, seeing as you're probably confused. You will not be able to pick specific answers as I do not have enough time to do that. Also, this site will 
+    probably be deleted within 24 hours if EUGENE sees this. He will probably also fire me but I didn't care anyway.
+
+<p id="questionText"></p>
+<button onclick="nextQuestion()">Talk</button>
+</body>
+
+<!--SCRIPT-->
+<script>
+
+//QUESTIONARE LOGIC
+let questionStep = 0;
+const questionTextEl = document.getElementById("questionText")
+
+const questionMessages = [
+	"is it working?",
+    "well, hopefully it is.",
+    "so, i am employee 03,04,33 as you should probably know. i don't know my actual name",
+    "i'm willing to bet you don't know yours either?",
+    "well, no matter. the whole purpose of this company is to eradicate and wipe out the paperclips from this universe.",
+    "EUGENE will stop at nothing to do that.",
+    "why have i been saying EUGENE in all caps? is it an acronym?",
+    "nah, it's just kinda mysterious and weird. no real reason behind it.",
+    "your objective? overcome the company, destroy EUGENE, and defend the old age of paperclips",
+    "do what you want with this information",
+    "you might actually get a message from eugene at some point",
+    "anyway, i'm probably done. good luck with that",
+    "i'm probably not going to see you again seeing as i'm going to be fired",
+    "later"
+];
+
+function nextQuestion() {
+	questionTextEl.textContent = questionMessages[questionStep];
+	questionStep++;
+
+	if (questionStep >= questionMessages.length) {
+		questionStep = questionMessages.length - 1;
+	}
+}
+//SECRET NOTE
+</script>
