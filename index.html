@@ -1,99 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MAL Style Anime List</title>
 
-  <title>hallo</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    body {
-      margin: 0;
-      padding: 40px;
+body{
+    background:#050505;
+    color:#cfcfcf;
+    font-family:"JetBrains Mono", monospace;
+    padding:24px;
+}
 
-      font-family: "Courier New", Courier, monospace;
+/* =========================
+   MAIN CONTAINER
+========================= */
+.container{
+    max-width:1400px;
+    margin:auto;
+}
 
-      background: #1b1b1b;
-      color: #f0f0f0;
-    }
+/* =========================
+   TABLE / LIST STYLE
+========================= */
+.anime-table{
+    width:100%;
+    border-collapse:collapse;
+    background:#111;
+    border:1px solid #262626;
+    margin-bottom:40px;
+}
 
-    .container {
-      max-width: 700px;
-    }
+/* EDIT HERE:
+   - Add new columns by inserting <th>
+   - Must match <td> order below */
+.anime-table th{
+    color:#7fa7ff;
+    font-weight:600;
+    text-align:left;
+    padding:12px 10px;
+    border-bottom:1px solid #2d2d2d;
+    font-size:13px;
+}
 
-    h1 {
-      margin: 0 0 35px 0;
-      padding-bottom: 12px;
+.anime-table td{
+    padding:10px;
+    border-bottom:1px solid #232323;
+    font-size:13px;
+    color:#c9c9c9;
+}
 
-      font-size: 2.2rem;
-
-      border-bottom: 2px solid #333;
-    }
-
-    a {
-      display: block;
-
-      margin-bottom: 18px;
-      padding: 16px 18px;
-
-      text-decoration: none;
-
-      background: #2a2a2a;
-      color: #e8e8e8;
-
-      border: 1px solid #3a3a3a;
-      border-radius: 10px;
-
-      line-height: 1.5;
-
-      transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        border-color 0.2s ease;
-    }
-
-    a:hover {
-      background: #343434;
-      border-color: #5a5a5a;
-      transform: translateX(4px);
-    }
-
-    a:last-child {
-      margin-bottom: 0;
-    }
-  </style>
+/* EDIT HERE:
+   - Each row = one anime entry
+   - Copy entire <tr> block to add new anime */
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<!-- =========================
+     ALL ANIME (DEFAULT ACTIVE TAB)
+========================= -->
+<section id="allanime" class="tab-section active">
 
-    <h1>dis is mah site</h1>
+    <h1 class="section-title">All Anime</h1>
 
-    <a href="Galactic Staples/index1.html">
-      Galactic staples - a game about automation and industrialism, coded by mr gpt himself.
-    </a>
+    <table class="anime-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Anime Title</th>
+                <th>Status</th>
+                <th>Score</th>
+                <th>Type</th>
+                <th>Progress</th>
+                <th>Tags</th>
+            </tr>
+        </thead>
 
-    <a href="stat tracking/sekiro_checklist.html">
-      My Sekiro: Shadows Die Twice boss checklist.
-    </a>
+        <tbody>
 
-    <a href="stat tracking/ds3_bosses.html">
-      My Dark Souls III boss checklist.
-    </a>
+        <!-- EDIT HERE: ADD / REMOVE ANIME ROWS BELOW -->
 
-    <a href="stat tracking/game-backlog.html">
-      My game backlog.
+        <tr>
+            <td class="number">1</td>
+            <td class="title">Chainsaw Man</td>
+            <td class="type">Completed</td>
+            <td class="score">10/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">Really good. fun protag, fun characters, nice music, amazing animation and I especially liked the pacing. Really solid. </td>
+        </tr>
 
-    <a href="stat tracking/anime-reviews.html">
-      My anime reviews.
-    </a>
+        <tr>
+            <td class="number">2</td>
+            <td class="title">Chainsaw Man: The Reze Arc</td>
+            <td class="type">Completed</td>
+            <td class="score">9/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">Really good, I thought it was slighly worse than season 1 but still really enjoyable.</td>
+        </tr>
 
-  </div>
+        <tr>
+            <td class="number">3</td>
+            <td class="title">Jujutsu Kaisen</td>
+            <td class="type">Completed</td>
+            <td class="score">7/10</td>
+            <td class="type">TV</td>
+            <td class="progress">24/24</td>
+            <td class="tags">Pretty good. I did think that the pacing was a little whatever especially towards the start but the exchange school arc was really good and worth it.</td>
+        </tr>
+
+            <tr>
+            <td class="number">4</td>
+            <td class="title">Jujutsu Kaisen 0</td>
+            <td class="type">Completed</td>
+            <td class="score">9/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">Yuta is much more interesting to watch than Yuji imo which made me enjoy this a lot more. Probably my favourite arc overall.</td>
+        </tr>
+
+        <tr>
+            <td class="number">4</td>
+            <td class="title">Jujutsu Kaisen Season 2</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">23/23</td>
+            <td class="tags">Really liked it. I disliked Shibuya more than most people generally cause I dislike multiple plots taking place at the same time, but it was still really well made. Hidden inventory was also really peak.</td>
+        </tr>
+
+        <tr>
+            <td class="number">4</td>
+            <td class="title">Jujutsu Kaisen - The Culling Game Part 1</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">Really good but I thought the first half dragged it down a little, especially that powerpoint episode. Sendai Colony more than makes up for that though.</td>
+        </tr>
+
+        <!-- COPY THIS BLOCK TO ADD NEW ENTRY -->
+        <!--
+        <tr>
+            <td class="number">X</td>
+            <td class="title"><a href="#">New Anime</a></td>
+            <td class="type">Status</td>
+            <td class="score">-</td>
+            <td class="type">TV/Movie</td>
+            <td class="progress">0/??</td>
+            <td class="tags"></td>
+        </tr>
+        -->
+
+        </tbody>
+    </table>
+</section>
+</div>
+
+<script>
+const buttons = document.querySelectorAll(".tab-btn");
+const sections = document.querySelectorAll(".tab-section");
+
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+
+        buttons.forEach(btn => btn.classList.remove("active"));
+        sections.forEach(section => section.classList.remove("active"));
+
+        button.classList.add("active");
+
+        const target = document.getElementById(button.dataset.tab);
+        target.classList.add("active");
+    });
+});
+</script>
 
 </body>
 </html>
