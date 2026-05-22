@@ -30,45 +30,6 @@ body{
 }
 
 /* =========================
-   NAVBAR
-========================= */
-.top-nav{
-    display:flex;
-    background:#111;
-    border:1px solid #2a2a2a;
-    margin-bottom:28px;
-    overflow:hidden;
-}
-
-.top-nav button{
-    flex:1;
-    background:#161616;
-    color:#7e8da3;
-    border:none;
-    border-right:1px solid #2a2a2a;
-    padding:14px 10px;
-    font-family:inherit;
-    font-size:13px;
-    cursor:pointer;
-    transition:0.15s;
-    letter-spacing:0.5px;
-}
-
-.top-nav button:last-child{
-    border-right:none;
-}
-
-.top-nav button:hover{
-    background:#202020;
-    color:#c7d8f0;
-}
-
-.top-nav button.active{
-    background:#252525;
-    color:#8ab4ff;
-}
-
-/* =========================
    TABLE / LIST STYLE
 ========================= */
 .anime-table{
@@ -105,27 +66,6 @@ body{
 </head>
 
 <body>
-
-<div class="container">
-
-<!-- =========================
-     NAVIGATION (ORDER MATTERS)
-     FIRST TAB IS DEFAULT START TAB
-========================= -->
-<div class="top-nav">
-
-    <!-- EDIT HERE: NAV ORDER
-         First button = first visible tab -->
-
-    <button class="tab-btn active" data-tab="allanime">All Anime</button>
-
-    <button class="tab-btn" data-tab="watching">Currently Watching</button>
-    <button class="tab-btn" data-tab="completed">Completed</button>
-    <button class="tab-btn" data-tab="onhold">On Hold</button>
-    <button class="tab-btn" data-tab="dropped">Dropped</button>
-    <button class="tab-btn" data-tab="plantowatch">Plan To Watch</button>
-
-</div>
 
 <!-- =========================
      ALL ANIME (DEFAULT ACTIVE TAB)
@@ -192,7 +132,7 @@ body{
         </tr>
 
         <tr>
-            <td class="number">4</td>
+            <td class="number">5</td>
             <td class="title">Jujutsu Kaisen Season 2</td>
             <td class="type">Completed</td>
             <td class="score">8/10</td>
@@ -202,7 +142,7 @@ body{
         </tr>
 
         <tr>
-            <td class="number">4</td>
+            <td class="number">6</td>
             <td class="title">Jujutsu Kaisen - The Culling Game Part 1</td>
             <td class="type">Completed</td>
             <td class="score">8/10</td>
@@ -210,6 +150,27 @@ body{
             <td class="progress">12/12</td>
             <td class="tags">Really good but I thought the first half dragged it down a little, especially that powerpoint episode. Sendai Colony more than makes up for that though.</td>
         </tr>
+
+        <tr>
+            <td class="number">7</td>
+            <td class="title">Jujutsu Kaisen - The Culling Game Part 1</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">Really good but I thought the first half dragged it down a little, especially that powerpoint episode. Sendai Colony more than makes up for that though.</td>
+        </tr>
+
+        <tr>
+            <td class="number">8</td>
+            <td class="title">Sora no Kiseki The Animation</td>
+            <td class="type">Completed</td>
+            <td class="score">5/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">It was okay. The animation was nice but... Seriously? Why change the main plot of Sky SC??? I don't get it. The plot felt rushed and definitely did not work in movie form. The fanservice was nice too.</td>
+        </tr>
+
 
         <!-- COPY THIS BLOCK TO ADD NEW ENTRY -->
         <!--
