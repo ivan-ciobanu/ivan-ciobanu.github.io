@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cinema Reviews</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#050505;
+    color:#cfcfcf;
+    font-family:"JetBrains Mono", monospace;
+    padding:24px;
+}
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+.container{
+    max-width:1400px;
+    margin:auto;
+}
+
+/* =========================
+   TABLE / LIST STYLE
+========================= */
+.anime-table{
+    width:100%;
+    border-collapse:collapse;
+    background:#111;
+    border:1px solid #262626;
+    margin-bottom:40px;
+}
+
+/* EDIT HERE:
+   - Add new columns by inserting <th>
+   - Must match <td> order below */
+.anime-table th{
+    color:#7fa7ff;
+    font-weight:600;
+    text-align:left;
+    padding:12px 10px;
+    border-bottom:1px solid #2d2d2d;
+    font-size:13px;
+}
+
+.anime-table td{
+    padding:10px;
+    border-bottom:1px solid #232323;
+    font-size:13px;
+    color:#c9c9c9;
+}
+
+/* EDIT HERE:
+   - Each row = one anime entry
+   - Copy entire <tr> block to add new anime */
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     ALL ANIME (DEFAULT ACTIVE TAB)
+========================= -->
+<section id="allanime" class="tab-section active">
+
+    <h1 class="section-title">All shows/movies</h1>
+
+    <table class="anime-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Score</th>
+                <th>Type</th>
+                <th>Progress</th>
+                <th>Tags</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        <!-- EDIT HERE: ADD / REMOVE ANIME ROWS BELOW -->
+
+        <tr>
+            <td class="number">1</td>
+            <td class="title">Chainsaw Man</td>
+            <td class="type">Completed</td>
+            <td class="score">10/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">Really good. fun protag, fun characters, nice music, amazing animation and I especially liked the pacing. Really solid. </td>
+        </tr>
+
+        <tr>
+            <td class="number">2</td>
+            <td class="title">Chainsaw Man: The Reze Arc</td>
+            <td class="type">Completed</td>
+            <td class="score">9/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">Really good, I thought it was slighly worse than season 1 but still really enjoyable.</td>
+        </tr>
+
+        <tr>
+            <td class="number">3</td>
+            <td class="title">Jujutsu Kaisen</td>
+            <td class="type">Completed</td>
+            <td class="score">7/10</td>
+            <td class="type">TV</td>
+            <td class="progress">24/24</td>
+            <td class="tags">Pretty good. I did think that the pacing was a little whatever especially towards the start but the exchange school arc was really good and worth it.</td>
+        </tr>
+
+            <tr>
+            <td class="number">4</td>
+            <td class="title">Jujutsu Kaisen 0</td>
+            <td class="type">Completed</td>
+            <td class="score">9/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">Yuta is much more interesting to watch than Yuji imo which made me enjoy this a lot more. Probably my favourite arc overall.</td>
+        </tr>
+
+        <tr>
+            <td class="number">5</td>
+            <td class="title">Jujutsu Kaisen Season 2</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">23/23</td>
+            <td class="tags">Really liked it. I disliked Shibuya more than most people generally cause I dislike multiple plots taking place at the same time, but it was still really well made. Hidden inventory was also really peak.</td>
+        </tr>
+
+        <tr>
+            <td class="number">6</td>
+            <td class="title">Jujutsu Kaisen - The Culling Game Part 1</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">Really good but I thought the first half dragged it down a little, especially that powerpoint episode. Sendai Colony more than makes up for that though.</td>
+        </tr>
+
+        <tr>
+            <td class="number">7</td>
+            <td class="title">Sora no Kiseki The Animation</td>
+            <td class="type">Completed</td>
+            <td class="score">5/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">It was okay. The animation was nice but... Seriously? Why change the main plot of Sky SC??? I don't get it. The plot felt rushed and definitely did not work in movie form. The fanservice was nice too.</td>
+        </tr>
+
+
+        <tr>
+            <td class="number">8</td>
+            <td class="title">Iron Lung</td>
+            <td class="type">Completed</td>
+            <td class="score">7/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">I don't really know how to feel about this one. I really liked it while watching it with friends and the costume/set design was actually amazing, the story was mostly left up to interpretation which I really like usually because it's fun hearing different peoples theories. Nothing negative I can say really, Mark's acting was decent but that's the closest thing. Good, but not amazing. Also not for everyone.</td>
+        </tr>
+
+        <tr>
+            <td class="number">9</td>
+            <td class="title">Attack on Titan</td>
+            <td class="type">Completed</td>
+            <td class="score">4/10</td>
+            <td class="type">TV</td>
+            <td class="progress">25/25</td>
+            <td class="tags">Umm, I thought season 1 was kinda shit tbh. It felt really slow and I hated the political aspect of it. Most of these complaints I also have for seasons 2 and 3. The characters were really well written and WIT cooked with the animation.</td>
+        </tr>
+
+        <tr>
+            <td class="number">10</td>
+            <td class="title">Attack on Titan Season 2</td>
+            <td class="type">Completed</td>
+            <td class="score">5/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">A marginal improvement from season 1. I did really like the characters and how they went more in depth into their personalities and lives, a lot of the arcs were way better too.</td>
+        </tr>
+
+        <tr>
+            <td class="number">11</td>
+            <td class="title">Attack on Titan Season 3</td>
+            <td class="type">Completed</td>
+            <td class="score">5/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">More political slop... I didn't really like it, not bad, just kinda boring.</td>
+        </tr>
+
+        <tr>
+            <td class="number">12</td>
+            <td class="title">Attack on Titan Season 3 Part 2</td>
+            <td class="type">Completed</td>
+            <td class="score">7/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">Now THIS is where AOT started getting better for me. That final fight scene was really interesting and captivating, the basement reveal was really cool too and it ends perfectly.</td>
+        </tr>
+
+        <tr>
+            <td class="number">13</td>
+            <td class="title">Attack on Titan Season 3 Part 2</td>
+            <td class="type">Completed</td>
+            <td class="score">7/10</td>
+            <td class="type">TV</td>
+            <td class="progress">10/10</td>
+            <td class="tags">Now THIS is where AOT started getting better for me. That final fight scene was really interesting and captivating, the basement reveal was really cool too and it ends perfectly.</td>
+        </tr>
+
+        <tr>
+            <td class="number">14</td>
+            <td class="title">Attack on Titan: Final Season</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">10/10</td>
+            <td class="tags">Now this is the good shit. The last parts were easily the best parts of Attack on Titan. Everyone feels motivated yet depressed after learning what was in the basement and watching them do their part in the war is really interesting. Also MAPPA cooked with this, I think they did slightly better than WIT but WIT was still really good.</td>
+        </tr>
+
+        <tr>
+            <td class="number">15</td>
+            <td class="title">Attack on Titan: Final Season Part 2</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">Just more of the Final Season. Everything I said regarding The Final Season applies here. Really good still.</td>
+        </tr>
+
+        <tr>
+            <td class="number">16</td>
+            <td class="title">Attack on Titan: Final Season - The Final Chapters</td>
+            <td class="type">Completed</td>
+            <td class="score">7/10</td>
+            <td class="type">TV</td>
+            <td class="progress">2/2</td>
+            <td class="tags">I don't get how people disliked the ending. I really liked it and thought it ended well, they were really good but the ending was roughly the only thing going for it, everything else was just pretty good.</td>
+        </tr>
+
+        <tr>
+            <td class="number">17</td>
+            <td class="title">Neon Genesis Evangelion</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">26/26</td>
+            <td class="tags">Actually amazing, genuinely really good and aged surprisingly well. Everything has a purpose, the characters are interesting and watching shinji progress as a person is very engaging to watch. Loved the themes and setting, action scenes were really tense when they needed to be and epic when they needed to be. Fuck that ending though.</td>
+        </tr>
+
+        <tr>
+            <td class="number">18</td>
+            <td class="title">End of Evangelion</td>
+            <td class="type">Completed</td>
+            <td class="score">9/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">My favourite ending out of all the Eva media (except the manga, still reading that). Really liked the tensity of the first half and the speculation and confusion of the second half.</td>
+        </tr>
+
+        <tr>
+            <td class="number">19</td>
+            <td class="title">Evangelion 1.0 You Are (Not) Alone</td>
+            <td class="type">Completed</td>
+            <td class="score">5/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">It was fine? Just a remake of the first few episodes of Neon Genesis Evangelion but done slightly poorer imo. I think this was necessary to set up the rebuilds but also just not very good on it's own when compared to Neon Genesis Evangelion. The animation was really good though.</td>
+        </tr>
+
+        <tr>
+            <td class="number">20</td>
+            <td class="title">Evangelion 2.0 You Can (Not) Advance</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">This is where the rebuilds peak imo. There's actually enough different stuff to differentiate it from Neon Genesis Evangelion while still maintaining core plot structure. Also that ending was fucking crazy but really good.</td>
+        </tr>
+
+        <tr>
+            <td class="number">21</td>
+            <td class="title">Evangelion 3.0 You Can (Not) Redo</td>
+            <td class="type">Completed</td>
+            <td class="score">7/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">Pretty good rebuild. Great continuation from where rebuild 2 left off with you feeling as confused and unsure as Shinji. The relationship between Kaworu and Shinji was really interesting, seeing how Shinji completely trusts someone as long as they are nice to him. Just the definition of a good rebuild, nothing crazy, but just good.</td>
+        </tr>
+
+        <tr>
+            <td class="number">22</td>
+            <td class="title">Evangelion 3.0+1.0 Thrice Upon a Time</td>
+            <td class="type">Completed</td>
+            <td class="score">6/10</td>
+            <td class="type">Movie</td>
+            <td class="progress">1/1</td>
+            <td class="tags">I liked most of it and I really liked what they did with Asuka and Rei's characters but I did not like the ending at all. Shit just happened and everything was le good. I like happy endings when they make sense, this was just a bunch of bullshit. You can argue that the whole IP is just a bunch of bullshit which yeah, fair point. I just thought that this was more so than the rest. To me it just felt like a worse version of the End of Evangelion ending.</td>
+        </tr>
+
+        <tr>
+            <td class="number">23</td>
+            <td class="title">Cyberpunk: Edgerunners</td>
+            <td class="type">Completed</td>
+            <td class="score">6/10</td>
+            <td class="type">TV</td>
+            <td class="progress">10/10</td>
+            <td class="tags">Most people would probably put this higher but it just didn't click with me. I went into this with the idea that it would be a sad ending and it was, it just didn't meet up to my expectations. I kind of ruined my experience with it and if I went in completely blind I would've enjoyed it much more. Great animation, great music, great characters, great story, I just never liked it. I also dislike cyberpunk settings which may have hindered my enjoyment.</td>
+        </tr>
+
+        <tr>
+            <td class="number">24</td>
+            <td class="title">Mob Psycho 100</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">Now this is when I discovered that I'm a little shonen enjoying gremlin despite this being like half slice of life. I think that this delivers on both fronts excellently and should be an example of how to write interesting arcs and characters without everything feeling overdone or uninteresting (the two things that shonens and slice of lifes both suffer from). Just really good.</td>
+        </tr>
+
+        <tr>
+            <td class="number">25</td>
+            <td class="title">Mob Psycho 100 II</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">13/13</td>
+            <td class="tags">Just more Mob Psycho. I feel the exact same way about season 2 as I do about season 1 so everything I said there applies here.</td>
+        </tr>
+
+        <tr>
+            <td class="number">26</td>
+            <td class="title">Mob Psycho 100 III</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">Just more Mob Psycho. I feel the exact same way about season 3 as I do about season 1 and season 2 so everything I said there applies here.</td>
+        </tr>
+
+        <tr>
+            <td class="number">27</td>
+            <td class="title">One-Punch Man</td>
+            <td class="type">Completed</td>
+            <td class="score">8/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">OPM makes me really happy and cozy for some reason until I remember what they did to the anime later. season 1 is genuinely really good, amazing fight scenes, like best in the genre level good. Even though you know that no matter what happens, Saitama will win, it's not about the destination. It's about the journey.</td>
+        </tr>
+
+        <tr>
+            <td class="number">28</td>
+            <td class="title">One-Punch Man Season 2</td>
+            <td class="type">Completed</td>
+            <td class="score">6/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">Season 2 wasn't bad by any means, just a significant downgrade from season 1 in terms of animation, pacing, and plot points. I also found that the audio was really bass boosted for some reason but the animation was okay. I fucking hated the tournament plot. Nothing happened and it was just the same joke happening over and over again.</td>
+        </tr>
+        
+                <tr>
+            <td class="number">29</td>
+            <td class="title">One-Punch Man Season 3</td>
+            <td class="type">Completed</td>
+            <td class="score">2/10</td>
+            <td class="type">TV</td>
+            <td class="progress">12/12</td>
+            <td class="tags">What the fuck did they do to you... You didn't deserve this... Um, for starters the animation is fucking terrible, that is if there even is animation half the time cause a large portion of the time it's just a still frame. Second of all, the amount of bloat and unnecessary shit added to pad this out was actually getting on my nerves. Fuck you J.C.staff.</td>
+        </tr>
+
+        <tr>
+            <td class="number">30</td>
+            <td class="title">Death Note</td>
+            <td class="type">Completed</td>
+            <td class="score">6/10</td>
+            <td class="type">TV</td>
+            <td class="progress">37/37</td>
+            <td class="tags">Just to start, this is 100% not my type of show. I might be one of the only people in the world who genuinely enjoyed the second half way more than the first. Why? I don't really know. I think it's that I liked the faster pace, new characters (I much prefer N to L), and the ending which I really liked. The first half was kinda bad imo. If I am ranking them seperately the first half is 4/10 while the second half is 7/10.</td>
+        </tr>
+        <!-- COPY THIS BLOCK TO ADD NEW ENTRY -->
+        <!--
+        <tr>
+            <td class="number">X</td>
+            <td class="title"><a href="#">New Anime</a></td>
+            <td class="type">Status</td>
+            <td class="score">-</td>
+            <td class="type">TV/Movie</td>
+            <td class="progress">0/??</td>
+            <td class="tags"></td>
+        </tr>
+        -->
+
+        </tbody>
+    </table>
+</section>
+</div>
+
+<script>
+const buttons = document.querySelectorAll(".tab-btn");
+const sections = document.querySelectorAll(".tab-section");
+
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+
+        buttons.forEach(btn => btn.classList.remove("active"));
+        sections.forEach(section => section.classList.remove("active"));
+
+        button.classList.add("active");
+
+        const target = document.getElementById(button.dataset.tab);
+        target.classList.add("active");
+    });
+});
+</script>
+
+</body>
+</html>
